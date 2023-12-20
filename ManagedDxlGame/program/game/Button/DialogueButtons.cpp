@@ -8,8 +8,8 @@
 #include "../ScenePlay/Battle/Scene_JankenBattle.h"
 #include "../SceneStageMap/Symbol/StageSymbol.h"
 
-
 std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton() {
+
 
 	std::shared_ptr<DialogueButtons[]> buttonArray(new DialogueButtons[BUTTON_ALL_NUM_DIALOGUE]);
 
@@ -34,12 +34,16 @@ std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton()
 
 void DialogueButtons::ManageFuncs_DialogueButton() {
 
+
 	static std::shared_ptr<DialogueButtons[]> buttonArray;
 
 	if (buttonArray == nullptr) buttonArray = Instantiate_DialogueButton();
 
 	// É{É^ÉìÇÃï`âÊÇ∆èàóù
 	for (int i = 0; i < BUTTON_ALL_NUM_DIALOGUE; i++) {
+
+		// îrëºêßå‰
+		std::lock_guard<std::mutex> lock(mtx);
 
 		DialogueButtons& btn = buttonArray[i];
 
@@ -48,6 +52,7 @@ void DialogueButtons::ManageFuncs_DialogueButton() {
 
 		DrawRotaGraph(btn.x, btn.y, btn._currentSize, 0.0f, btn.handle, true);
 	}
+
 }
 
 

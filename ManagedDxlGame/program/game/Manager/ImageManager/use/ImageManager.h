@@ -30,14 +30,4 @@ public:
 	void Set_CharacterMapKey();
 	void Load_CharacterImage(const std::string& key);
 	void Render_CharacterImage(const int& x, const int& y, const double& size, const int& isTranslucent, const std::string& path);
-
-
-	
-	//　↓使ってません
-	// アセット画像の Key も BackGroundImages.cpp を参照
-	// 	std::unique_ptr<CharacterImages>  _ASSETS_IMAGE;
-	//void Get_SomeAssetsMapKey(const std::string& key);
-	//void Load_SomeAssetsImage(const std::string& pathName);
-	//void Render_SomeAssetsImage(const int& x, const int& y, const double& size, const int& isTranslucent);
-
 };

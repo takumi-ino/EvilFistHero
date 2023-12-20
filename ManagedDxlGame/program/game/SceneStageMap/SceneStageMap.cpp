@@ -60,7 +60,6 @@ void SceneStageMap::GameStartByInput() {
 		{
 		case StageSymbol::Symbol::FOREST:
 		{
-
 			SetStageInfo_BeforeStartGame(StageSymbol::Symbol::FOREST);
 			break;
 		}

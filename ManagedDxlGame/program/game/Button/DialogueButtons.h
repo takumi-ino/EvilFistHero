@@ -1,6 +1,7 @@
 #pragma once
 #include "../../utility/DxLib_Engine.h"
 #include "../../utility/tnlSequence.h"
+#include <mutex>
 
 
 class DialogueButtons
@@ -115,4 +116,9 @@ public:
 	float _autoTimer = 0.0f;
 
 	ButtonType_Dialogue _type_dialogue; // ƒ{ƒ^ƒ“‚ÌŽí—Þ
+
+
+private:
+	std::mutex mtx;
+
 };

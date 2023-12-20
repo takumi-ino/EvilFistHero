@@ -307,6 +307,9 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 		{
 		WIN:
 			ResetGame();
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
 			auto scene = SceneManager::GetInstance();
 			scene->ChangeScene(new SceneStageMap());
 		}
