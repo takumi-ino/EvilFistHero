@@ -37,12 +37,6 @@ std::vector<int> Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_MAXIND
 };
 
 
-Hand::Hand() {
-
-	LoadAllHandHandle();
-}
-
-
 void Hand::LoadAllHandHandle() {
 
 	_gpc_cursor_hdl = LoadGraph("graphics/Hand/cursor.png");
@@ -54,7 +48,6 @@ void Hand::LoadAllHandHandle() {
 
 void Hand::RenderPlayerHandSelection() {
 
-	// ぐーちょきぱーの画像表示
 	for (int i = 0; i < HAND_TYPE_MAX; ++i) {
 		DrawRotaGraphF(GUCHOKIPA_HANDPOS_TBL[i].x, GUCHOKIPA_HANDPOS_TBL[i].y + 55, 0.5f, 0, _gpc_hand_hdl[i], true);
 	}
@@ -87,9 +80,7 @@ void Hand::SelectMyHand_UpdateCursorPos() {
 bool Hand::canSelectBossHand = true;
 
 
-
-void Hand::SubtractEitherHP(int& playerHP, int& bossHP) {
-
+void Hand::SubtractLosersHP(int& playerHP, int& bossHP) {
 
 	// じゃんけんの勝敗判定
 	if (_playerHandIndex == HAND_TYPE_STONE) {
@@ -182,7 +173,6 @@ void Hand::AssignJankenResult() {
 }
 
 
-
 int Hand::_jankenResult;
 
 
@@ -194,9 +184,11 @@ void Hand::RenderJankenResultImage() {
 	// プレイヤーがジャンケンに勝ったか負けたか、あいこかを毎ターン表示
 	DrawStringEx(490, 400, -1, RESULT_NOTICE_STR[_jankenResult].c_str());
 
+	DrawRotaGraphF(
+		RESULT_BOSS_HAND_POS.x + 55, RESULT_BOSS_HAND_POS.y - 15, 0.5f, 0, _gpc_hand_hdl[_bossSelectedHand], true);
 
-	DrawRotaGraphF(RESULT_BOSS_HAND_POS.x + 55, RESULT_BOSS_HAND_POS.y - 15, 0.5f, 0, _gpc_hand_hdl[_bossSelectedHand], true);
-	DrawRotaGraphF(RESULT_PLAYER_HAND_POS.x - 30, RESULT_PLAYER_HAND_POS.y - 15, 0.5f, 0, _gpc_hand_hdl[_playerHandIndex], true);
+	DrawRotaGraphF(
+		RESULT_PLAYER_HAND_POS.x - 30, RESULT_PLAYER_HAND_POS.y - 15, 0.5f, 0, _gpc_hand_hdl[_playerHandIndex], true);
 
 	SetFontSize(30);
 	DrawStringEx(RESULT_BOSS_HAND_POS.x + 45, RESULT_BOSS_HAND_POS.y + 50, -1, "ENEMY");
@@ -207,7 +199,6 @@ void Hand::RenderJankenResultImage() {
 
 void Hand::RenderJankenResultText(int playerHP, int bossHP) {
 
-
 	SetFontSize(DEFAULT_FONT_SIZE);
 
 	if (playerHP != 0 && bossHP == 0) {
@@ -217,7 +208,6 @@ void Hand::RenderJankenResultText(int playerHP, int bossHP) {
 		SetFontSize(55);
 		DrawString(530, 490, "Enter to StageMap", -1, true);
 		return;
-
 	}
 	if (playerHP == 0 && bossHP != 0) {
 

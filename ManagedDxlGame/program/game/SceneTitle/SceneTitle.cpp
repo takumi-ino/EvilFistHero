@@ -4,6 +4,15 @@
 #include "../SceneTitle_SelectMenu/SceneTitle_SelectMenu.h"
 
 
+namespace {
+
+	const int _LOGO_X = 630;
+	const int _LOGO_Y = 170;
+	const int _BG_X = 30;
+	const int _BG_Y = 30;
+}
+
+
 bool SceneTitle::SeqIdle(float deltaTime) {
 
 	if (_sequence.isStart()) {
@@ -34,9 +43,9 @@ void SceneTitle::Update(float deltaTime) {
 
 void SceneTitle::Render(float deltaTime) {
 
-	DrawRotaGraph(_BG_X, _BG_Y, 0.8f, 0, _bgImage_hdl, true);   // îwåi
+	DrawRotaGraph(_BG_X, _BG_Y, 0.8f, 0, _bgImage_hdl, true);
 
-	DrawRotaGraph(_LOGO_X, _LOGO_Y, 2.0f, 0, _logoImage_hdl, true);// ÉçÉS
+	DrawRotaGraph(_LOGO_X, _LOGO_Y, 2.0f, 0, _logoImage_hdl, true);
 
 	SetFontSize(55);
 	DrawFormatString(440, 600, -1, "Enter to Start");

@@ -8,8 +8,33 @@
 #include "../ScenePlay/Battle/Scene_JankenBattle.h"
 #include "../SceneStageMap/Symbol/StageSymbol.h"
 
-std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton() {
 
+namespace {
+
+	// ボタンの数
+	const int BUTTON_ALL_NUM_DIALOGUE = 7;
+
+	// ボタンの初期位置
+	const int BUTTON_POS_X_DIALOGUE = 125;
+	const int BUTTON_POS_Y_DIALOGUE = 700;
+
+	// ボタンの間隔
+	const int BUTTON_INTERVAL_DIALOGUE = 170;
+
+	const char* _buttonImgPath_dialogue[7] =
+	{
+	"graphics/Buttons/TitleFuncBtn.png",
+	"graphics/Buttons/LoadFuncBtn.png",
+	"graphics/Buttons/SaveFuncBtn.png",
+	"graphics/Buttons/AutoFuncBtn.png",
+	"graphics/Buttons/SkipFuncBtn.png",
+	"graphics/Buttons/LogFuncBtn.png",
+	"graphics/Buttons/ConfigFuncBtn.png",
+	};
+}
+
+
+std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton() {
 
 	std::shared_ptr<DialogueButtons[]> buttonArray(new DialogueButtons[BUTTON_ALL_NUM_DIALOGUE]);
 
@@ -32,12 +57,12 @@ std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton()
 
 
 
-void DialogueButtons::ManageFuncs_DialogueButton() {
-
+void DialogueButtons::ManageDialogueButton() {
 
 	static std::shared_ptr<DialogueButtons[]> buttonArray;
 
-	if (buttonArray == nullptr) buttonArray = Instantiate_DialogueButton();
+	if (buttonArray == nullptr)
+		buttonArray = Instantiate_DialogueButton();
 
 	// ボタンの描画と処理
 	for (int i = 0; i < BUTTON_ALL_NUM_DIALOGUE; i++) {
@@ -47,30 +72,33 @@ void DialogueButtons::ManageFuncs_DialogueButton() {
 
 		DialogueButtons& btn = buttonArray[i];
 
-		ZoomFunc_OnMouse_Dialogue(btn);
-		ClickFunc_OnButton_Dialogue(btn);
+		ZoomOnMouse_Dialogue(btn);
+		ClickOnButton_Dialogue(btn);
 
-		DrawRotaGraph(btn.x, btn.y, btn._currentSize, 0.0f, btn.handle, true);
+		DrawRotaGraph(btn.btnX1, btn.btnY1, btn._currentSize, 0.0f, btn.handle, true);
 	}
-
 }
 
 
 
-void DialogueButtons::Render_FuncButtons_Dialogue() {
+void DialogueButtons::RenderDialogueButtons() {
 
-	ManageFuncs_DialogueButton();
+	ManageDialogueButton();
 }
 
 
 
-void DialogueButtons::ZoomFunc_OnMouse_Dialogue(DialogueButtons& btnInfo) {
+void DialogueButtons::ZoomOnMouse_Dialogue(DialogueButtons& btnInfo) {
 
 	int hoveredX = 0, hoveredY = 0;
 
 	GetMousePoint(&hoveredX, &hoveredY);
 
-	if (hoveredX >= btnInfo.x && hoveredX <= btnInfo.x + btnInfo.width && hoveredY >= btnInfo.y && hoveredY <= btnInfo.y + btnInfo.height) {
+	if (hoveredX >= btnInfo.btnX1 &&
+		hoveredX <= btnInfo.btnX1 + btnInfo.width && 
+		hoveredY >= btnInfo.btnY1 &&
+		hoveredY <= btnInfo.btnY1 + btnInfo.height)
+	{
 		btnInfo._currentSize = btnInfo.BUTTON_SIZE_ZOOM_DIALOGUE;
 	}
 	else {
@@ -80,7 +108,7 @@ void DialogueButtons::ZoomFunc_OnMouse_Dialogue(DialogueButtons& btnInfo) {
 
 
 
-void DialogueButtons::ClickFunc_OnButton_Dialogue(const DialogueButtons& btnInfos) {
+void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
 
 	int clickX_axis = 0, clickY_axis = 0;
 
@@ -88,10 +116,13 @@ void DialogueButtons::ClickFunc_OnButton_Dialogue(const DialogueButtons& btnInfo
 
 	if (GetMouseInput() && MOUSE_INPUT_LEFT) {
 
-		if (clickX_axis >= btnInfos.x && clickX_axis <= btnInfos.x + btnInfos.width &&
-			clickY_axis >= btnInfos.y && clickY_axis <= btnInfos.y + btnInfos.height) {
+		if (clickX_axis >= btnInfos.btnX1 && 
+			clickX_axis <= btnInfos.btnX1 + btnInfos.width &&
+			clickY_axis >= btnInfos.btnY1 && 
+			clickY_axis <= btnInfos.btnY1 + btnInfos.height)
+		{
 			// ボタンの種類に応じて処理を分岐する
-			switch (btnInfos._type_dialogue) {
+			switch (btnInfos.type_dialogue) {
 
 			case ButtonType_Dialogue::TITLE: // TITLEボタン
 			{
@@ -110,7 +141,7 @@ void DialogueButtons::ClickFunc_OnButton_Dialogue(const DialogueButtons& btnInfo
 			}
 			case ButtonType_Dialogue::AUTO: // AUTOボタン
 			{
-				_autoText = !_autoText;
+				autoText = !autoText;
 				break;
 			}
 			case ButtonType_Dialogue::SKIP: // SKIPボタン
@@ -139,9 +170,6 @@ void DialogueButtons::ClickFunc_OnButton_Dialogue(const DialogueButtons& btnInfo
 			{
 				break;
 			}
-
-			default:
-				break;
 			}
 		}
 	}
@@ -149,15 +177,15 @@ void DialogueButtons::ClickFunc_OnButton_Dialogue(const DialogueButtons& btnInfo
 
 
 
-void DialogueButtons::Auto_Dialogue() {
+void DialogueButtons::AutoDialogue() {
 
-	if (!_autoText) 	return;
+	if (!autoText) 	return;
 
-	_autoTimer += 0.02f;
+	autoTimer += 0.02f;
 
-	if (_autoTimer >= 1.5f) {
+	if (autoTimer >= 1.5f) {
 
 		SceneConversation::_CURRENT_TEXTROW++;
-		_autoTimer = 0.0f;
+		autoTimer = 0.0f;
 	}
 }

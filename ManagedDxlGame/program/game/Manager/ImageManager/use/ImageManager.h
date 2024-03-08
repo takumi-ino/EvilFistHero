@@ -8,10 +8,6 @@ private:
 
 	ImageManager() {}
 
-
-	std::unique_ptr<BackGroundImages> _BG_IMAGE;   // 背景とその他アセット画像
-	std::unique_ptr<CharacterImages>  _CHAR_IMAGE; // キャラクター画像
-
 public:
 
 	static ImageManager& GetInstance() {
@@ -20,14 +16,23 @@ public:
 		return instance;
 	}
 
+	/*
+	  　 各画像クラス　CharacterImages、　BackGroundImages　では
+	  　画像のロードに std::unordered_mapを使用する。このクラスのロード関数からはその Key(pathName) を渡す
+	*/
 
-	// 背景画像の Key は BackGroundImages.cpp を参照
-	void Set_BackGroundMapKey();
-	void Load_BackGroundImage(const std::string& pathName);
-	void Render_BackGroundImage(const int& x, const int& y, const double& size, const int& isTranslucent);
+	// 背景　--------------------------------------------------------------------------------
+	void LoadBackGroundImage(const std::string& pathName);
+	void SetBackGroundMapKey();
+	void RenderBackGroundImage(const int& x, const int& y, const double& size, const int& isTranslucent);
 
-	// キャラクター画像の Key は CharacterImages.cpp を参照
-	void Set_CharacterMapKey();
-	void Load_CharacterImage(const std::string& key);
-	void Render_CharacterImage(const int& x, const int& y, const double& size, const int& isTranslucent, const std::string& path);
+	// キャラクター　--------------------------------------------------------------------------------
+	void LoadCharacterImage(const std::string& key);
+	void SetCharacterMapKey();
+	void RenderCharacterImage(const int& x, const int& y, const double& size, const int& isTranslucent, const std::string& path);
+
+private:
+
+	std::unique_ptr<BackGroundImages> _BG_IMAGE;   // 背景とその他アセット画像
+	std::unique_ptr<CharacterImages>  _CHAR_IMAGE; // キャラクター画像
 };

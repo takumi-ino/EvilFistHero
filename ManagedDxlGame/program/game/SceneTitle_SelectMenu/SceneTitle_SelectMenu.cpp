@@ -4,15 +4,22 @@
 #include "../Button/DialogueButtons.h"
 
 
+namespace {
 
-struct SceneTitle_SelectMenu::SelectMenu selectItems[] = {
+	const int _MENU_ALLITEM_NUM = 3;
+	const int _BG_X = 30;
+	const int _BG_Y = 30;
+}
+
+
+struct SceneTitle_SelectMenu::SelectMenu selectItems[] =
+{
 
 {80,110,"ゲーム開始"},
 {100,260,"ゲーム終了"},
 {100,410,"もどる"}
 
 };
-
 
 
 bool SceneTitle_SelectMenu::SeqIdle(float deltaTime) {
@@ -48,9 +55,12 @@ void SceneTitle_SelectMenu::SelectMenuByInput() {
 				sc->Instantiate_DialogueButton();
 				delete sc;
 				sc = nullptr;
-			};
+				};
 
-			if(SceneConversation::Prologue_Epilogue != 0)  SceneConversation::Prologue_Epilogue = 0;
+			if (SceneConversation::Prologue_Epilogue != 0) {
+
+				SceneConversation::Prologue_Epilogue = 0;
+			}
 
 			// プロローグへ
 			SoundManager::GetInstance().StopBGM();
@@ -60,10 +70,12 @@ void SceneTitle_SelectMenu::SelectMenuByInput() {
 		}
 		else if (1 == _menu_index) {
 
+			// ゲーム終了
 			DxLib_End();
 		}
 		else if (2 == _menu_index) {
 
+			//　タイトルに戻る
 			auto scene = SceneManager::GetInstance();
 			scene->ChangeScene(new SceneTitle());
 		}
@@ -72,11 +84,12 @@ void SceneTitle_SelectMenu::SelectMenuByInput() {
 	// 選択中の項目の座標を移動
 	for (int i = 0; i < _MENU_ALLITEM_NUM; i++) {
 
-		if (i == _menu_index) 	selectItems[i].menu_x = 90;
-		else 	                selectItems[i].menu_x = 110;
+		if (i == _menu_index)
+			selectItems[i].menu_x = 90;
+		else
+			selectItems[i].menu_x = 110;
 	}
 }
-
 
 
 void SceneTitle_SelectMenu::ShowMenu() {
@@ -99,10 +112,11 @@ void SceneTitle_SelectMenu::Render(float deltaTime) {
 	for (int i = 0; i < _MENU_ALLITEM_NUM; i++) {
 
 		DrawFormatString(
-			selectItems[i].menu_x, 
-			selectItems[i].menu_y, 
-			GetColor(255, 255, 255), 
-			"・ %s", selectItems[i].menu_name);
+			selectItems[i].menu_x,
+			selectItems[i].menu_y,
+			GetColor(255, 255, 255),
+			"・ %s", selectItems[i].menu_name
+		);
 	}
 
 	SetFontSize(40);

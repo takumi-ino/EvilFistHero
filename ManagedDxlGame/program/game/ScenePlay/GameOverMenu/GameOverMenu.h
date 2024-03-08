@@ -3,10 +3,7 @@
 
 class GameOverMenu
 {
-public:
-
-	static void SelectGameOverMenu();
-	static void BranchProcess_ByGameOverMenu();
+private:
 
 	enum RetryMenu
 	{
@@ -19,11 +16,17 @@ public:
 public:
 
 	typedef struct {
-		int x, y;
+		int x;
+		int y;
 		char name[128];
 	} MenuElement;
 
 public:
+
+	static void SelectGameOverMenu();
+	static void BranchProcess_ByGameOverMenu();
+
+private:
 	
-	static int _gameOverMenuIndex;
+	static int gameOverMenuIndex;
 };

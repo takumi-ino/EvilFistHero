@@ -7,7 +7,7 @@ class SoundType_BGM
 {
 private:
 
-	int _BGM_hdl;
+	int _BGM_hdl{};
 
 public:
 

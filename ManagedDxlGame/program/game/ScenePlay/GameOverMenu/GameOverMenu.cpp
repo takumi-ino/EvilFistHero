@@ -15,11 +15,10 @@ struct GameOverMenu::MenuElement gameOverMenuItems[] = {
 };
 
 
-int GameOverMenu::_gameOverMenuIndex;
+int GameOverMenu::gameOverMenuIndex;
 
 
 void GameOverMenu::SelectGameOverMenu() {
-
 
 	for (int i = 0; i < MENU_MAX_NUM; i++) {
 
@@ -27,19 +26,21 @@ void GameOverMenu::SelectGameOverMenu() {
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP)) {
-		_gameOverMenuIndex = (_gameOverMenuIndex + (MENU_MAX_NUM - 1)) % MENU_MAX_NUM;
+		gameOverMenuIndex = (gameOverMenuIndex + (MENU_MAX_NUM - 1)) % MENU_MAX_NUM;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
-		_gameOverMenuIndex = (_gameOverMenuIndex + 1) % MENU_MAX_NUM;
+		gameOverMenuIndex = (gameOverMenuIndex + 1) % MENU_MAX_NUM;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP) || tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
 
 		for (int i = 0; i < MENU_MAX_NUM; i++) {
 
-			if (i == _gameOverMenuIndex) gameOverMenuItems[i].x = 90;
-			else                        gameOverMenuItems[i].x = 110;
+			if (i == gameOverMenuIndex) 
+				gameOverMenuItems[i].x = 90;
+			else                      
+				gameOverMenuItems[i].x = 110;
 		}
 	}
 }
@@ -48,8 +49,7 @@ void GameOverMenu::SelectGameOverMenu() {
 
 void GameOverMenu::BranchProcess_ByGameOverMenu() {
 
-
-	switch (_gameOverMenuIndex)
+	switch (gameOverMenuIndex)
 	{
 
 	case GameOverMenu::MENU_RETRY:
@@ -59,7 +59,7 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 			SoundManager::GetInstance().StopBGM();
 
 			auto scene = SceneManager::GetInstance();
-			scene->ChangeScene(new Scene_JankenBattle(StageSymbol::_episodeID));
+			scene->ChangeScene(new Scene_JankenBattle(StageSymbol::episodeID));
 
 			[](Scene_JankenBattle* j) {
 
@@ -68,7 +68,7 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 
 				delete j;
 				j = nullptr;
-				};
+			};
 		}
 		break;
 	}

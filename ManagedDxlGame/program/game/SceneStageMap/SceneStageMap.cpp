@@ -7,6 +7,19 @@
 #include "../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
 
 
+namespace {
+
+	// エピソードタイトルの座標
+	const int    _EPISODE_TITLE_POS_X = 395;
+	const int    _EPISODE_TITLE_POS_Y = 175;
+
+	// 背景画像の座標
+	const int    _BG_IMAGE_POS_X = 640;
+	const int    _BG_IMAGE_POS_Y = 360;
+	const double _BG_EXRATE = 0.47;
+}
+
+
 SceneStageMap::SceneStageMap() {
 
 	_bossRef_ptr = new EnemyBoss();
@@ -21,13 +34,11 @@ bool SceneStageMap::SeqIdle(float deltaTime) {
 		_bgImage_hdl = LoadGraph("graphics/WorldMap.png");
 
 		SoundManager::GetInstance().LoadBGM("sound/BGM/WorldMap_BGM.mp3");
-
 		SoundManager::GetInstance().PlayBGM();
 	}
 
 	return true;
 }
-
 
 
 void SceneStageMap::Update(float deltaTime) {
@@ -36,27 +47,24 @@ void SceneStageMap::Update(float deltaTime) {
 }
 
 
-
 void SceneStageMap::SetStageInfo_BeforeStartGame(const StageSymbol::Symbol symbol) {
 
 	_bossRef_ptr->InitBossHP(symbol);
 
 	Scene_JankenBattle::InitPlayerHP();
 
-	if (symbol == StageSymbol::KINGDOM)
-		ImageManager::GetInstance().Load_BackGroundImage("ステージ5");
-
 	auto scene = SceneManager::GetInstance();
 	scene->ChangeScene(new Scene_JankenBattle());
 }
-
 
 
 void SceneStageMap::GameStartByInput() {
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
-		switch (StageSymbol::_episodeID)
+		SoundManager::GetInstance().StopBGM();
+
+		switch (StageSymbol::episodeID)
 		{
 		case StageSymbol::Symbol::FOREST:
 		{
@@ -97,14 +105,11 @@ void SceneStageMap::GameStartByInput() {
 			SetStageInfo_BeforeStartGame(StageSymbol::Symbol::CONTINENT);
 			break;
 		}
-
-		default:
-			break;
 		}
 	}
 	else if (tnl::Input::IsKeyDownTrigger(eKeys::KB_BACK)) {
 
-		_symbolRef_ptr->_onSelectedSymbol = false;
+		_symbolRef_ptr->onSelectedSymbol = false;
 	}
 }
 
@@ -112,7 +117,7 @@ void SceneStageMap::GameStartByInput() {
 
 void SceneStageMap::ShowFinalCheck_BeforeStartGame() {
 
-	if (!_symbolRef_ptr->_onSelectedSymbol) {
+	if (!_symbolRef_ptr->onSelectedSymbol) {
 
 		_symbolRef_ptr->RenderSymbolMark();
 	}
@@ -120,7 +125,7 @@ void SceneStageMap::ShowFinalCheck_BeforeStartGame() {
 
 		SetFontSize(55);
 		// エピソードタイトル表示
-		DrawStringEx(_EPISODE_TITLE_POS_X, _EPISODE_TITLE_POS_Y, -1, StageSymbol::_EPISODE_TITLE);
+		DrawStringEx(_EPISODE_TITLE_POS_X, _EPISODE_TITLE_POS_Y, -1, StageSymbol::EPISODE_TITLE);
 
 		SetFontSize(50);
 		DrawStringEx(350, 400, -1, "はじめる：Enter");
@@ -129,7 +134,6 @@ void SceneStageMap::ShowFinalCheck_BeforeStartGame() {
 		GameStartByInput();
 	}
 }
-
 
 
 void SceneStageMap::Render(float deltaTime) {

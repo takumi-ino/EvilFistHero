@@ -15,7 +15,7 @@ int Scene_JankenBattle::_playerHP = 0;
 
 Scene_JankenBattle::Scene_JankenBattle() {
 
-	_bossRef_ptr = new EnemyBoss(StageSymbol::_episodeID);
+	_bossRef_ptr = new EnemyBoss(StageSymbol::episodeID);
 	_sliderRef_ptr = new SliderEvent();
 	_handRef_ptr = new Hand();
 }
@@ -25,7 +25,7 @@ bool Scene_JankenBattle::SeqLoadMem(float delta_time) {
 
 	if (_sequence.isStart()) {
 
-		switch (StageSymbol::_episodeID)
+		switch (StageSymbol::episodeID)
 		{
 		case StageSymbol::FOREST:
 
@@ -68,8 +68,7 @@ bool Scene_JankenBattle::SeqLoadMem(float delta_time) {
 
 void Scene_JankenBattle::InitPlayerHP() {
 
-
-	switch (StageSymbol::_episodeID)
+	switch (StageSymbol::episodeID)
 	{
 	case StageSymbol::FOREST:
 
@@ -166,8 +165,8 @@ void Scene_JankenBattle::GameState_StartLogic() {
 
 	if (_bossRef_ptr == nullptr) {
 
-		_bossRef_ptr = new EnemyBoss(StageSymbol::_episodeID);
-		_bossRef_ptr->InitBossHP(StageSymbol::_episodeID);
+		_bossRef_ptr = new EnemyBoss(StageSymbol::episodeID);
+		_bossRef_ptr->InitBossHP(StageSymbol::episodeID);
 	}
 
 	if (_handRef_ptr == nullptr) {
@@ -249,7 +248,7 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 
 			if (isSliderChallenge && !isMovingSlider) {
 
-				_sliderRef_ptr->SliderFuncUpdate_PerFrame(deltaTime, StageSymbol::_episodeID, EnemyBoss::_bossHP);
+				_sliderRef_ptr->SliderFuncUpdate_PerFrame(deltaTime, StageSymbol::episodeID, EnemyBoss::bossHP);
 			}
 
 			if (isMovingSlider && !isSelectMyHand) {
@@ -269,7 +268,7 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 					Hand::canSelectBossHand = false;
 				}
 
-				_bossRef_ptr->RenderBossEnemy(StageSymbol::_episodeID);
+				_bossRef_ptr->RenderBossEnemy(StageSymbol::episodeID);
 				_bossRef_ptr->RenderBossHP();
 				_bossRef_ptr->RenderBossHandProb(_sliderRef_ptr);
 
@@ -280,16 +279,16 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 			if (isShowResult) {
 
 				_handRef_ptr->RenderJankenResultImage();
-				_handRef_ptr->RenderJankenResultText(_playerHP, EnemyBoss::_bossHP);
+				_handRef_ptr->RenderJankenResultText(_playerHP, EnemyBoss::bossHP);
 			}
 
 
 			if (canSubtractHP) {
 
-				_handRef_ptr->SubtractEitherHP(_playerHP, EnemyBoss::_bossHP);
+				_handRef_ptr->SubtractLosersHP(_playerHP, EnemyBoss::bossHP);
 
 				// HPの結果によってゲームクリア、ゲームオーバー、ゲーム続行かが決まる
-				CURRENT_STATE = CheckIsOverJankenBattle(_playerHP, EnemyBoss::_bossHP);
+				CURRENT_STATE = CheckIsOverJankenBattle(_playerHP, EnemyBoss::bossHP);
 
 				if (CURRENT_STATE == GameState::WIN) goto WIN;
 
@@ -302,6 +301,7 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 			GameOverMenu::SelectGameOverMenu();
 			GameOverMenu::BranchProcess_ByGameOverMenu();
 		}
+
 		break;
 		case Scene_JankenBattle::GameState::WIN:
 		{
@@ -328,7 +328,7 @@ void Scene_JankenBattle::Update(float deltaTime) {
 
 	_sequence.update(deltaTime);
 
-	_bossRef_ptr->RenderBackGround(StageSymbol::_episodeID);
+	_bossRef_ptr->RenderBackGround(StageSymbol::episodeID);
 
 	ExecuteLogic_ByBattleState(deltaTime);
 }
@@ -337,7 +337,6 @@ void Scene_JankenBattle::Update(float deltaTime) {
 
 void Scene_JankenBattle::ReleaseMem() {
 
-	_sliderRef_ptr->ReleaseSliderHandle();
 	delete _sliderRef_ptr;
 	_sliderRef_ptr = nullptr;
 	

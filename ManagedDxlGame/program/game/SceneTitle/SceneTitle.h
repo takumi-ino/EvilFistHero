@@ -3,11 +3,10 @@
 #include "../../utility/tnlSequence.h"
 #include "../Manager/SceneManager/SceneBase.h"
 
+
 class SceneTitle :public SceneBase
 {
 public:
-
-	SceneTitle(){}
 
 	void Update(float deltaTime) override;
 	void Render(float deltaTime) override;
@@ -20,11 +19,6 @@ private:
 
 private:
 
-	int _bgImage_hdl; // ”wŒi‰æ‘œ
-	int	_logoImage_hdl; // ƒƒS‘fŞ
-
-	const int _LOGO_X = 630;
-	const int _LOGO_Y = 170;
-	const int _BG_X = 30;
-	const int _BG_Y = 30;
+	int _bgImage_hdl{};   // ”wŒi‰æ‘œ
+	int	_logoImage_hdl{}; // ƒƒS‘fŞ
 };

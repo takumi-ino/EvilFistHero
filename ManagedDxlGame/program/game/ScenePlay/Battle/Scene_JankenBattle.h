@@ -8,7 +8,7 @@
 #include "../../../utility/tnlSequence.h"
 #include "../../../utility/DxLib_Engine.h"
 
-#define SYMBOL_ALLNUM 6
+constexpr static int SYMBOL_ALLNUM = 6;
 
 class Hand;
 
@@ -25,7 +25,7 @@ public:
 	};
 
 	Scene_JankenBattle();
-	Scene_JankenBattle(const int episodeID) {}
+	Scene_JankenBattle(const int) {}
 
 	void Update(float deltaTime) override;
 	void ReleaseMem() override;
@@ -56,22 +56,22 @@ private:
 
 private:
 
-	GameState CURRENT_STATE = GameState::START;
+	GameState    CURRENT_STATE = GameState::START;
 
-	EnemyBoss* _bossRef_ptr = nullptr;
+	EnemyBoss*   _bossRef_ptr = nullptr;
 	SliderEvent* _sliderRef_ptr = nullptr;
-	Hand* _handRef_ptr = nullptr;
+	Hand*        _handRef_ptr = nullptr;
 
 	tnl::Sequence<Scene_JankenBattle> _sequence = tnl::Sequence<Scene_JankenBattle>(this, &Scene_JankenBattle::SeqLoadMem);
 	bool SeqLoadMem(float delta_time);
 
 public:
 
-	static int        _playerHP;
+	static int   _playerHP;
 
 private:
 
-	// ゲームリセット時に使用するconst 変数群
+	// ゲームリセット時に使用する const 変数群
 	const bool IS_BATTLE_START = true;
 	const bool IS_SLIDER_CHALLENGE = false;
 	const bool IS_MOVING_SLIDER = false;
@@ -86,10 +86,7 @@ private:
 	bool canSubtractHP = CAN_SUBTRACT_HP;
 	bool isShowResult = IS_SHOW_RESULT;
 
-	int _switch_bg_id;
-	int _bgImg_hdl;
 
-public:
 	const char* _stageBGM_path[SYMBOL_ALLNUM] =
 	{
 	"sound/BGM/EP1_BattleBGM.mp3",

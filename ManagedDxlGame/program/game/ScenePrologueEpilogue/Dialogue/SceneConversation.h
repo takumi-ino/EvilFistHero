@@ -3,7 +3,6 @@
 #include "../../../utility/DxLib_Engine.h"
 #include "../../../utility/tnlSequence.h"
 #include "../../Button/DialogueButtons.h"
-#include <string>
 
 
 class SceneConversation : public SceneBase
@@ -40,8 +39,8 @@ private:
 
 	void ReleaseMem() override;
 
-	void PrintDialogueText();
-	void PrintNextByInput();
+	void PrintDialogueText(); // テキスト描画
+	void PrintNextByInput();  // テキスト送り
 
 	tnl::Sequence<SceneConversation> _sequence = tnl::Sequence<SceneConversation>(this, &SceneConversation::SeqIdle);
 	bool SeqIdle(float deltaTime);
@@ -54,15 +53,13 @@ private:
 
 public:
 
-	// プロローグとエピローグの切り替え用 Int
+	// プロローグ（0）とエピローグ（1）の切り替え用
 	static int Prologue_Epilogue;
 
 	// テキストのインデックス
 	static int _CURRENT_TEXTROW;
 
 private:
-
-	int _bg_hdl;
 
 	bool _isSetPlayerBright = false;
 	bool _isSetGoddessBright = false;
@@ -73,16 +70,16 @@ private:
 	bool _showGoddess = false;
 	bool _showGirl = false;
 
-	int _inputName_hdl;
+	int _bg_hdl{};
+	int _inputName_hdl{};
 	int _strCount = 0;
 	int _printSpeedAdj = 3;
 
 private:
 
-	std::string _PLAYER_NAME;
+	std::string PLAYER_NAME;
 
 	std::string receiveText[140];
-
 
 	std::string prologueTextLog[140] = {
 

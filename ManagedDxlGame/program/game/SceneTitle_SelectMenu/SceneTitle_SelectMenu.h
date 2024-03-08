@@ -7,10 +7,6 @@ class SceneTitle_SelectMenu : public SceneBase
 {
 public:
 
-	SceneTitle_SelectMenu(){
-	
-	}
-
 	void Update(float deltaTime) override;
 	void Render(float deltaTime) override;
 	void ReleaseMem() override;
@@ -28,17 +24,13 @@ public:
 
 	typedef struct {
 
-		int menu_x, menu_y;  // •¶š—ñÀ•W
+		int menu_x;          // •¶š—ñÀ•W X
+		int menu_y;          // •¶š—ñÀ•W Y
 		char menu_name[128]; // •¶š—ñ–¼
 	}SelectMenu;
 
 private:
 
-	int _bgImage_hdl;
-	int _menu_index;
-
-	const int _MENU_ALLITEM_NUM = 3;
-
-	const int _BG_X = 30;
-	const int _BG_Y = 30;
+	int       _bgImage_hdl{};
+	int       _menu_index{};
 };

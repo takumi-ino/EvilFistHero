@@ -18,18 +18,7 @@ void SliderEvent::LoadSliderHandle() {
 }
 
 
-
-void SliderEvent::ReleaseSliderHandle() {
-
-	for (int i = 0; i < SLIDER_IMG_NUM; ++i) {
-
-		DeleteGraph(slider_images[i]);
-	}
-}
-
-
-
-void SliderEvent::SliderAnimationFunc(float deltaTime, const float speed) {
+void SliderEvent::SliderAnimation(float deltaTime, const float speed) {
 
 	slider_timeCount += deltaTime * speed;
 
@@ -44,49 +33,48 @@ void SliderEvent::SliderAnimationFunc(float deltaTime, const float speed) {
 
 
 
-void SliderEvent::SliderFuncUpdate_PerFrame(const float deltaTime, const int _episodeID, const int bossHP) {
+void SliderEvent::SliderFuncUpdate_PerFrame(const float deltaTime, const int episodeID, const int bossHP) {
 
-	_speed = 0.0f;
+	speed = 0.0f;
 
+	switch (episodeID * 10 + bossHP) {
 
-	switch (_episodeID * 10 + bossHP) {
-
-	case 11:  _episodeID == 1 && bossHP == 1;
-	case 22:  _episodeID == 2 && bossHP == 2;
-	case 33:  _episodeID == 3 && bossHP == 3;
-	case 44:  _episodeID == 4 && bossHP == 4;
-	case 55:  _episodeID == 5 && bossHP == 5;
-	case 66:  _episodeID == 6 && bossHP == 6;
-		_speed = 1.0f;
+	case 11:  episodeID == 1 && bossHP == 1;
+	case 22:  episodeID == 2 && bossHP == 2;
+	case 33:  episodeID == 3 && bossHP == 3;
+	case 44:  episodeID == 4 && bossHP == 4;
+	case 55:  episodeID == 5 && bossHP == 5;
+	case 66:  episodeID == 6 && bossHP == 6;
+		speed = 1.0f;
 		break;
-	case 21:  _episodeID == 2 && bossHP == 1;
-	case 32:  _episodeID == 3 && bossHP == 2;
-	case 43:  _episodeID == 4 && bossHP == 3;
-	case 54:  _episodeID == 5 && bossHP == 4;
-	case 65:  _episodeID == 6 && bossHP == 5;
-		_speed = 1.5f;
+	case 21:  episodeID == 2 && bossHP == 1;
+	case 32:  episodeID == 3 && bossHP == 2;
+	case 43:  episodeID == 4 && bossHP == 3;
+	case 54:  episodeID == 5 && bossHP == 4;
+	case 65:  episodeID == 6 && bossHP == 5;
+		speed = 1.5f;
 		break;
-	case 31:  _episodeID == 3 && bossHP == 1;
-	case 42:  _episodeID == 4 && bossHP == 2;
-	case 53:  _episodeID == 5 && bossHP == 3;
-	case 64:  _episodeID == 6 && bossHP == 4;
-		_speed = 2.0f;
+	case 31:  episodeID == 3 && bossHP == 1;
+	case 42:  episodeID == 4 && bossHP == 2;
+	case 53:  episodeID == 5 && bossHP == 3;
+	case 64:  episodeID == 6 && bossHP == 4;
+		speed = 2.0f;
 		break;
-	case 41:  _episodeID == 4 && bossHP == 1;
-	case 52:  _episodeID == 5 && bossHP == 2;
-	case 63:  _episodeID == 6 && bossHP == 3;
-		_speed = 2.5f;
+	case 41:  episodeID == 4 && bossHP == 1;
+	case 52:  episodeID == 5 && bossHP == 2;
+	case 63:  episodeID == 6 && bossHP == 3;
+		speed = 2.5f;
 		break;
-	case 51:  _episodeID == 5 && bossHP == 1;
-	case 62:  _episodeID == 6 && bossHP == 2;
-		_speed = 3.0f;
+	case 51:  episodeID == 5 && bossHP == 1;
+	case 62:  episodeID == 6 && bossHP == 2;
+		speed = 3.0f;
 		break;
-	case 61:  _episodeID == 6 && bossHP == 1;
-		_speed = 4.0f;
+	case 61:  episodeID == 6 && bossHP == 1;
+		speed = 4.0f;
 		break;
 	}
 
-	SliderAnimationFunc(deltaTime, _speed);
+	SliderAnimation(deltaTime, speed);
 	GetSliderGrade();
 	DrawRotaGraph(620, 380, 0.75f, 0, slider_images[slider_imageIndex], true);
 }
@@ -129,7 +117,6 @@ void SliderEvent::GetSliderGrade() {
 
 
 void SliderEvent::ShowSliderGrade() {
-
 
 	SetFontSize(45);
 

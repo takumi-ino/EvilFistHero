@@ -112,36 +112,40 @@ void CharacterImages::LoadCharacterImg(const std::string& key) {
 
 	if (imageMap_player.count(key) > 0) {
 
-		if (_player_hdl != -1)	DeleteGraph(_player_hdl);
+		if (_player_hdl != -1)	
+			DeleteGraph(_player_hdl);
 		
 		_player_hdl = LoadGraph(path.c_str());
 	}
 
 	if (imageMap_goddess.count(key) > 0) {
 
-		if (_goddess_hdl != -1) DeleteGraph(_goddess_hdl);
+		if (_goddess_hdl != -1) 
+			DeleteGraph(_goddess_hdl);
 
 		_goddess_hdl = LoadGraph(path.c_str());
 	}
 
 	if (imageMap_girl.count(key) > 0) {
 
-		if (_girl_hdl != -1)	DeleteGraph(_girl_hdl);
+		if (_girl_hdl != -1)	
+			DeleteGraph(_girl_hdl);
 
 		_girl_hdl = LoadGraph(path.c_str());
 	}
 
 	if (imageMap_bosses.count(key) > 0) {
 
-		if (_boss_hdl != -1)    DeleteGraph(_boss_hdl);
+		if (_boss_hdl != -1)   
+			DeleteGraph(_boss_hdl);
 
 		_boss_hdl = LoadGraph(path.c_str());
 	}
 }
 
 
-void CharacterImages::RenderCharacterImage(const int& x, const int& y, const double& size, const int& isTranslucent, const std::string& path) {
-
+void CharacterImages::RenderCharacterImage(
+	const int& x, const int& y, const double& size, const int& isTranslucent, const std::string& path) {
 
 	if (imageMap_player.count(path) > 0) {
 		// ƒvƒŒƒCƒ„[
