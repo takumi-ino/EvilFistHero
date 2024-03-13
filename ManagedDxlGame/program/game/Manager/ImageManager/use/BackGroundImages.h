@@ -1,6 +1,5 @@
 #pragma once
 #include "../../../../utility/DxLib_Engine.h"
-#include "../../../../utility/tnlSequence.h"
 
 class BackGroundImages
 {
@@ -10,17 +9,20 @@ public:
 	explicit BackGroundImages(const char* path) {}
 
 	~BackGroundImages() {
-
 		DeleteGraph(_BG_hdl);
 	}
 
+	// 背景画像ロード
 	void LoadBackGroundImg(const std::string& key);
 
+	// unordered_mapで使用する画像呼び出し用のキーをセット
 	void SetImgMapKey_BackGround();
 
-	std::string GetImgMapKey_BackGround(const std::string& key);
-
 	void RenderBackGroundImg(const int& x, const int& y, const double& size, const int& isTranslucent);
+
+private:
+
+	std::string GetImgMapKey_BackGround(const std::string& key);
 
 private:
 

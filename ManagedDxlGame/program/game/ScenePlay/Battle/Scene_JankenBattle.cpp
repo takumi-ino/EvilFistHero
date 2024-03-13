@@ -1,62 +1,102 @@
+#include "../../../utility/tnlSequence.h"
+#include "../../../utility/DxLib_Engine.h"
 #include "Scene_JankenBattle.h"
+#include "../Boss/EnemyBoss.h"
 #include "../../SceneStageMap/Symbol/StageSymbol.h"
 #include "../../SceneStageMap/SceneStageMap.h"
 #include "../../Manager/SceneManager/SceneBase.h"
 #include "../../Manager/SceneManager/SceneManager.h"
-#include "../GameOverMenu/GameOverMenu.h"
-#include "../Boss/EnemyBoss.h"
 #include "../../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
 #include "../../Manager/ImageManager/use/ImageManager.h"
 #include "../../Manager/SoundManager/SoundManager.h"
+#include "../GameOverMenu/GameOverMenu.h"
+#include "../Slider/SliderEvent.h"
+#include "../Hand/Hand.h"
 
 
 int Scene_JankenBattle::_playerHP = 0;
 
 
-Scene_JankenBattle::Scene_JankenBattle() {
+namespace {
 
-	_bossRef_ptr = new EnemyBoss(StageSymbol::episodeID);
-	_sliderRef_ptr = new SliderEvent();
-	_handRef_ptr = new Hand();
+	// ゲームリセット時に使用する const 変数群
+	const bool IS_BATTLE_START = true;
+	const bool IS_SLIDER_CHALLENGE = false;
+	const bool IS_MOVING_SLIDER = false;
+	const bool IS_SELECT_MYHAND = false;
+	const bool CAN_SUBTRACT_HP = false;
+	const bool IS_SHOW_RESULT = false;
+
+	bool isBattleStart = IS_BATTLE_START;
+	bool isSliderChallenge = IS_SLIDER_CHALLENGE;
+	bool isMovingSlider = IS_MOVING_SLIDER;
+	bool isSelectMyHand = IS_SELECT_MYHAND;
+	bool canSubtractHP = CAN_SUBTRACT_HP;
+	bool isShowResult = IS_SHOW_RESULT;
+
+	const char* _stageBGM_path[SYMBOL_ALLNUM] =
+	{
+	"sound/BGM/EP1_BattleBGM.mp3",
+	"sound/BGM/EP2_BattleBGM.mp3",
+	"sound/BGM/EP3_BattleBGM.mp3",
+	"sound/BGM/EP4_BattleBGM.mp3",
+	"sound/BGM/EP5_BattleBGM.mp3",
+	"sound/BGM/EP6_BattleBGM.mp3",
+	};
 }
 
 
-bool Scene_JankenBattle::SeqLoadMem(float delta_time) {
+Scene_JankenBattle::Scene_JankenBattle() {
+
+	_bossRef_ptr = new EnemyBoss(StageSymbol::_episodeID);
+	_sliderRef_ptr = new SliderEvent();
+	_handRef_ptr = new Hand();
+
+	LoadBattleBGM();
+}
+
+
+void Scene_JankenBattle::LoadBattleBGM() {
+
+	switch (StageSymbol::_episodeID)
+	{
+	case StageSymbol::FOREST:
+
+		SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::FOREST - 1]);
+		break;
+	case StageSymbol::VILLAGE:
+
+		SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::VILLAGE - 1]);
+		break;
+	case StageSymbol::CITY:
+
+		SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::CITY - 1]);
+		break;
+	case StageSymbol::THEOCRACY:
+
+		SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::THEOCRACY - 1]);
+		break;
+	case StageSymbol::KINGDOM:
+
+		SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::KINGDOM - 1]);
+		break;
+	case StageSymbol::CONTINENT:
+
+		SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::CONTINENT - 1]);
+		break;
+	}
+}
+
+
+
+bool Scene_JankenBattle::SeqCheckPlayBGMOrNot(float delta_time) {
 
 	if (_sequence.isStart()) {
-
-		switch (StageSymbol::episodeID)
-		{
-		case StageSymbol::FOREST:
-
-			SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::FOREST - 1]);
-			break;
-		case StageSymbol::VILLAGE:
-
-			SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::VILLAGE - 1]);
-			break;
-		case StageSymbol::CITY:
-
-			SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::CITY - 1]);
-			break;
-		case StageSymbol::THEOCRACY:
-
-			SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::THEOCRACY - 1]);
-			break;
-		case StageSymbol::KINGDOM:
-
-			SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::KINGDOM - 1]);
-			break;
-		case StageSymbol::CONTINENT:
-
-			SoundManager::GetInstance().LoadBGM(_stageBGM_path[StageSymbol::CONTINENT - 1]);
-			break;
-		}
 
 		SoundManager::GetInstance().PlayBGM();
 	}
 
-	if (CURRENT_STATE == GameState::WIN) {
+	if (_CURRENT_STATE == GameState::WIN) {
 
 		SoundManager::GetInstance().StopBGM();
 	}
@@ -68,7 +108,7 @@ bool Scene_JankenBattle::SeqLoadMem(float delta_time) {
 
 void Scene_JankenBattle::InitPlayerHP() {
 
-	switch (StageSymbol::episodeID)
+	switch (StageSymbol::_episodeID)
 	{
 	case StageSymbol::FOREST:
 
@@ -121,11 +161,13 @@ void Scene_JankenBattle::RenderJankenResult_Player() {
 		Hand::RESULT_PLAYER_HAND_POS.x - 30,
 		Hand::RESULT_PLAYER_HAND_POS.y - 15,
 		0.5f, 0,
-		Hand::_gpc_hand_hdl[Hand::_playerHandIndex], true);
+		Hand::_gpc_hand_hdl[Hand::_playerHandIndex], true
+	);
 
 	DrawStringEx(
 		Hand::RESULT_PLAYER_HAND_POS.x - 50,
-		Hand::RESULT_PLAYER_HAND_POS.y + 50, -1, "PLAYER");
+		Hand::RESULT_PLAYER_HAND_POS.y + 50, -1, "PLAYER"
+	);
 }
 
 
@@ -144,7 +186,6 @@ void Scene_JankenBattle::ResetGame() {
 
 Scene_JankenBattle::GameState Scene_JankenBattle::CheckIsOverJankenBattle(const int playerHP, const int bossHP) {
 
-
 	if (playerHP != 0 && bossHP == 0) {
 
 		return GameState::WIN;
@@ -159,21 +200,23 @@ Scene_JankenBattle::GameState Scene_JankenBattle::CheckIsOverJankenBattle(const 
 
 
 
-void Scene_JankenBattle::GameState_StartLogic() {
+void Scene_JankenBattle::GameStart_FirstTransaction() {
 
-	if (_sliderRef_ptr == nullptr) 	_sliderRef_ptr = new SliderEvent();
+	if (_sliderRef_ptr == nullptr) {
+
+		_sliderRef_ptr = new SliderEvent();
+	}
 
 	if (_bossRef_ptr == nullptr) {
 
-		_bossRef_ptr = new EnemyBoss(StageSymbol::episodeID);
-		_bossRef_ptr->InitBossHP(StageSymbol::episodeID);
+		_bossRef_ptr = new EnemyBoss(StageSymbol::_episodeID);
+		_bossRef_ptr->InitBossHP(StageSymbol::_episodeID);
 	}
 
 	if (_handRef_ptr == nullptr) {
 
 		_handRef_ptr = new Hand();
 		_handRef_ptr->LoadAllHandHandle();
-
 	}
 
 	InitPlayerHP();
@@ -186,7 +229,7 @@ void Scene_JankenBattle::GameState_StartLogic() {
 		isSliderChallenge = true;
 		isBattleStart = false;
 
-		CURRENT_STATE = GameState::PLAY;
+		_CURRENT_STATE = GameState::PLAY;
 	}
 }
 
@@ -195,7 +238,6 @@ void Scene_JankenBattle::GameState_StartLogic() {
 void Scene_JankenBattle::ChangeGameStateByBools() {
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
-
 
 		if (isSliderChallenge) {
 
@@ -219,7 +261,7 @@ void Scene_JankenBattle::ChangeGameStateByBools() {
 		}
 		else if (isShowResult) {
 
-			Hand::canSelectBossHand = true;
+			Hand::_canSelectBossHand = true;
 
 			canSubtractHP = true;
 			isSliderChallenge = true;
@@ -232,14 +274,13 @@ void Scene_JankenBattle::ChangeGameStateByBools() {
 
 void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 
+	if (_CURRENT_STATE != GameState::WIN) {
 
-	if (CURRENT_STATE != GameState::WIN) {
-
-		switch (CURRENT_STATE)
+		switch (_CURRENT_STATE)
 		{
 		case Scene_JankenBattle::GameState::START:
 		{
-			GameState_StartLogic();
+			GameStart_FirstTransaction();
 		}
 		break;
 		case Scene_JankenBattle::GameState::PLAY:
@@ -248,7 +289,7 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 
 			if (isSliderChallenge && !isMovingSlider) {
 
-				_sliderRef_ptr->SliderFuncUpdate_PerFrame(deltaTime, StageSymbol::episodeID, EnemyBoss::bossHP);
+				_sliderRef_ptr->SliderFuncUpdate_PerFrame(deltaTime, StageSymbol::_episodeID, EnemyBoss::bossHP);
 			}
 
 			if (isMovingSlider && !isSelectMyHand) {
@@ -262,13 +303,13 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 
 				RenderPlayerHP();
 				// 敵が手を選択
-				if (Hand::canSelectBossHand) {
+				if (Hand::_canSelectBossHand) {
 
 					Hand::_bossSelectedHand = rand() % Hand::HAND_TYPE_MAX;
-					Hand::canSelectBossHand = false;
+					Hand::_canSelectBossHand = false;
 				}
 
-				_bossRef_ptr->RenderBossEnemy(StageSymbol::episodeID);
+				_bossRef_ptr->RenderBossEnemy(StageSymbol::_episodeID);
 				_bossRef_ptr->RenderBossHP();
 				_bossRef_ptr->RenderBossHandProb(_sliderRef_ptr);
 
@@ -288,9 +329,9 @@ void Scene_JankenBattle::ExecuteLogic_ByBattleState(float deltaTime) {
 				_handRef_ptr->SubtractLosersHP(_playerHP, EnemyBoss::bossHP);
 
 				// HPの結果によってゲームクリア、ゲームオーバー、ゲーム続行かが決まる
-				CURRENT_STATE = CheckIsOverJankenBattle(_playerHP, EnemyBoss::bossHP);
+				_CURRENT_STATE = CheckIsOverJankenBattle(_playerHP, EnemyBoss::bossHP);
 
-				if (CURRENT_STATE == GameState::WIN) goto WIN;
+				if (_CURRENT_STATE == GameState::WIN) goto WIN;
 
 				canSubtractHP = false;
 			}
@@ -328,7 +369,7 @@ void Scene_JankenBattle::Update(float deltaTime) {
 
 	_sequence.update(deltaTime);
 
-	_bossRef_ptr->RenderBackGround(StageSymbol::episodeID);
+	_bossRef_ptr->RenderBackGround(StageSymbol::_episodeID);
 
 	ExecuteLogic_ByBattleState(deltaTime);
 }

@@ -5,12 +5,12 @@ class GameOverMenu
 {
 private:
 
-	enum RetryMenu
+	enum class NEXT
 	{
-		MENU_RETRY,
-		MENU_RETURNMAP,
-		MENU_BACKTITLE,
-		MENU_MAX_NUM
+		RETRY,
+		RETURNMAP,
+		BACKTITLE,
+		MAX_NUM
 	};
 
 public:

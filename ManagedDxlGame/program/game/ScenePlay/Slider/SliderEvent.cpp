@@ -1,4 +1,12 @@
+#include "../../../utility/DxLib_Engine.h"
 #include "SliderEvent.h"
+
+
+namespace {
+
+	const int   slider_y = 280;
+	const float SLIDER_INTERVAL = 0.1f;
+}
 
 
 SliderEvent::SliderEvent() {
@@ -13,103 +21,92 @@ void SliderEvent::LoadSliderHandle() {
 
 		char fileName[40];
 		sprintf_s(fileName, "graphics/SliderBar/Bar%d.png", i + 1);
-		slider_images[i] = LoadGraph(fileName);
+		_slider_images[i] = LoadGraph(fileName);
 	}
 }
 
 
-void SliderEvent::SliderAnimation(float deltaTime, const float speed) {
+void SliderEvent::SliderAnimation(float deltaTime, const float _speed) {
 
-	slider_timeCount += deltaTime * speed;
+	_slider_timeCount += deltaTime * _speed;
 
-	if (slider_timeCount > SLIDER_INTERVAL) {
+	if (_slider_timeCount > SLIDER_INTERVAL) {
 
-		slider_imageIndex++;
-		slider_imageIndex %= SLIDER_IMG_NUM;
+		_slider_imageIndex++;
+		_slider_imageIndex %= SLIDER_IMG_NUM;
 
-		slider_timeCount = 0;
+		_slider_timeCount = 0;
 	}
 }
-
 
 
 void SliderEvent::SliderFuncUpdate_PerFrame(const float deltaTime, const int episodeID, const int bossHP) {
 
-	speed = 0.0f;
+	_speed = 0.0f;
 
 	switch (episodeID * 10 + bossHP) {
 
-	case 11:  episodeID == 1 && bossHP == 1;
-	case 22:  episodeID == 2 && bossHP == 2;
-	case 33:  episodeID == 3 && bossHP == 3;
-	case 44:  episodeID == 4 && bossHP == 4;
-	case 55:  episodeID == 5 && bossHP == 5;
-	case 66:  episodeID == 6 && bossHP == 6;
-		speed = 1.0f;
-		break;
-	case 21:  episodeID == 2 && bossHP == 1;
-	case 32:  episodeID == 3 && bossHP == 2;
-	case 43:  episodeID == 4 && bossHP == 3;
-	case 54:  episodeID == 5 && bossHP == 4;
-	case 65:  episodeID == 6 && bossHP == 5;
-		speed = 1.5f;
-		break;
-	case 31:  episodeID == 3 && bossHP == 1;
-	case 42:  episodeID == 4 && bossHP == 2;
-	case 53:  episodeID == 5 && bossHP == 3;
-	case 64:  episodeID == 6 && bossHP == 4;
-		speed = 2.0f;
-		break;
-	case 41:  episodeID == 4 && bossHP == 1;
-	case 52:  episodeID == 5 && bossHP == 2;
-	case 63:  episodeID == 6 && bossHP == 3;
-		speed = 2.5f;
-		break;
-	case 51:  episodeID == 5 && bossHP == 1;
-	case 62:  episodeID == 6 && bossHP == 2;
-		speed = 3.0f;
-		break;
-	case 61:  episodeID == 6 && bossHP == 1;
-		speed = 4.0f;
-		break;
+	case 11:  _speed = 1.0f; break; /* episodeID == 1 && bossHP == 1;*/
+	case 22:  _speed = 1.0f; break; /* episodeID == 2 && bossHP == 2;*/
+	case 33:  _speed = 1.0f; break; /* episodeID == 3 && bossHP == 3;*/
+	case 44:  _speed = 1.0f; break; /* episodeID == 4 && bossHP == 4;*/
+	case 55:  _speed = 1.0f; break; /* episodeID == 5 && bossHP == 5;*/
+	case 66:  _speed = 1.0f; break; /* episodeID == 6 && bossHP == 6;*/
+
+	case 21: _speed = 1.5f;	break; /* episodeID == 2 && bossHP == 1;*/
+	case 32: _speed = 1.5f;	break; /* episodeID == 3 && bossHP == 2;*/
+	case 43: _speed = 1.5f;	break; /* episodeID == 4 && bossHP == 3;*/
+	case 54: _speed = 1.5f;	break; /* episodeID == 5 && bossHP == 4;*/
+	case 65: _speed = 1.5f;	break; /* episodeID == 6 && bossHP == 5;*/
+
+	case 31: _speed = 2.0f; break; /* episodeID == 3 && bossHP == 1;*/
+	case 42: _speed = 2.0f; break; /* episodeID == 4 && bossHP == 2;*/
+	case 53: _speed = 2.0f; break; /* episodeID == 5 && bossHP == 3;*/
+	case 64: _speed = 2.0f; break; /* episodeID == 6 && bossHP == 4;*/
+
+	case 41: _speed = 2.5f; break; /*episodeID == 4 && bossHP == 1;*/
+	case 52: _speed = 2.5f; break; /*episodeID == 5 && bossHP == 2;*/
+	case 63: _speed = 2.5f; break; /*episodeID == 6 && bossHP == 3;*/
+
+	case 51: _speed = 3.0f; break; /*episodeID == 5 && bossHP == 1;*/
+	case 62: _speed = 3.0f; break; /*episodeID == 6 && bossHP == 2;*/
+
+	case 61: _speed = 4.0f; break; /*episodeID == 6 && bossHP == 1;*/
 	}
 
-	SliderAnimation(deltaTime, speed);
-	GetSliderGrade();
-	DrawRotaGraph(620, 380, 0.75f, 0, slider_images[slider_imageIndex], true);
+	SliderAnimation(deltaTime, _speed);
+	SetSliderGrade();
+	DrawRotaGraph(620, 380, 0.75f, 0, _slider_images[_slider_imageIndex], true);
 }
 
 
-int SliderEvent::slider_grade;
+void SliderEvent::SetSliderGrade() {
 
-
-void SliderEvent::GetSliderGrade() {
-
-	switch (slider_imageIndex) {
+	switch (_slider_imageIndex) {
 
 	case 0:
-		slider_grade = SliderGrade::SLIDER_GRADE_PERFECT;
-		slider_color = GetColor(255, 165, 0);
-		slider_x = 500;
+		_slider_grade = SliderGrade::SLIDER_GRADE_PERFECT;
+		_slider_color = GetColor(255, 165, 0);
+		_slider_x1 = 500;
 		break;
 	case 1:
 	case 2:
 	case 3:
-		slider_grade = SliderGrade::SLIDER_GRADE_GREAT;
-		slider_color = GetColor(0, 240, 0);
-		slider_x = 530;
+		_slider_grade = SliderGrade::SLIDER_GRADE_GREAT;
+		_slider_color = GetColor(0, 240, 0);
+		_slider_x1 = 530;
 		break;
 	case 4:
 	case 5:
 	case 6:
-		slider_grade = SliderGrade::SLIDER_GRADE_GOOD;
-		slider_color = GetColor(245, 245, 245);
-		slider_x = 540;
+		_slider_grade = SliderGrade::SLIDER_GRADE_GOOD;
+		_slider_color = GetColor(245, 245, 245);
+		_slider_x1 = 540;
 		break;
 	default:
-		slider_grade = SliderGrade::SLIDER_GRADE_BAD;
-		slider_color = GetColor(100, 100, 100);
-		slider_x = 570;
+		_slider_grade = SliderGrade::SLIDER_GRADE_BAD;
+		_slider_color = GetColor(100, 100, 100);
+		_slider_x1 = 570;
 		break;
 	}
 }
@@ -120,26 +117,26 @@ void SliderEvent::ShowSliderGrade() {
 
 	SetFontSize(45);
 
-	switch (slider_grade) {
+	switch (_slider_grade) {
 
 	case SliderGrade::SLIDER_GRADE_PERFECT:
 
-		DrawString(slider_x, slider_y, "PERFECT!", slider_color);
+		DrawString(_slider_x1, slider_y, "PERFECT!", _slider_color);
 		break;
 	case SliderGrade::SLIDER_GRADE_GREAT:
 
-		DrawString(slider_x, slider_y, "GREAT!", slider_color);
+		DrawString(_slider_x1, slider_y, "GREAT!", _slider_color);
 		break;
 	case SliderGrade::SLIDER_GRADE_GOOD:
 
-		DrawString(slider_x, slider_y, "GOOD", slider_color);
+		DrawString(_slider_x1, slider_y, "GOOD", _slider_color);
 		break;
 	case SliderGrade::SLIDER_GRADE_BAD:
 
-		DrawString(slider_x, slider_y, "BAD", slider_color);
+		DrawString(_slider_x1, slider_y, "BAD", _slider_color);
 		break;
 	}
 
 	// スライダーの画像を表示する
-	DrawRotaGraph(620, 380, 0.75f, 0, slider_images[slider_imageIndex], true);
+	DrawRotaGraph(620, 380, 0.75f, 0, _slider_images[_slider_imageIndex], true);
 }

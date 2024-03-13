@@ -1,14 +1,8 @@
 #pragma once
-#include "../../../utility/tnlSequence.h"
-#include "../../../utility/DxLib_Engine.h"
 
 
 class SoundType_BGM
 {
-private:
-
-	int _BGM_hdl{};
-
 public:
 
 	SoundType_BGM() {}
@@ -18,4 +12,8 @@ public:
 
 	void Play();
 	void Stop();
+
+private:
+
+	int _BGM_hdl{};
 };

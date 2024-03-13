@@ -1,21 +1,16 @@
 #pragma once
-#include "../../utility/DxLib_Engine.h"
-#include "../../utility/tnlSequence.h"
 #include "../Manager/SceneManager/SceneBase.h"
 
 
-class SceneTitle :public SceneBase
+class SceneTitle : public SceneBase
 {
 public:
+
+	SceneTitle();
 
 	void Update(float deltaTime) override;
 	void Render(float deltaTime) override;
 	void ReleaseMem() override;
-
-private:
-
-	tnl::Sequence<SceneTitle> _sequence = tnl::Sequence<SceneTitle>(this, &SceneTitle::SeqIdle);
-	bool SeqIdle(float deltaTime);
 
 private:
 

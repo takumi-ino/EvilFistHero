@@ -1,12 +1,7 @@
 #include "Hand.h"
-#include "../Battle/Scene_JankenBattle.h"
-#include "../../SceneStageMap/SceneStageMap.h"
-#include "../GameOverMenu/GameOverMenu.h"
-#include "../../Manager/SceneManager/SceneManager.h"
 
 
 const tnl::Vector3 Hand::RESULT_PLAYER_HAND_POS = { 300, 400, 0 };
-
 const tnl::Vector3 Hand::RESULT_BOSS_HAND_POS = { 900, 400, 0 };
 
 int Hand::_playerHandIndex = HAND_TYPE_STONE;
@@ -15,10 +10,15 @@ int Hand::_bossSelectedHand = HAND_TYPE_STONE;
 
 int Hand::_gpc_hand_hdl[Hand::HAND_TYPE_MAX];
 
-int Hand::_gpc_cursor_hdl;
-
 int Hand::_gu_prob, Hand::_choki_prob, Hand::_pa_prob;
 
+
+namespace {
+
+	const std::string RESULT_NOTICE_STR[3] = { "You Win", "You Lose", "  Draw  " };
+	const std::string START_NEXTTURN_STR = "Enter to Next";
+	const tnl::Vector3 START_NEXTTURN_STRPOS = { 500, 500, 0 };
+}
 
 const tnl::Vector3 Hand::GUCHOKIPA_HANDPOS_TBL[HAND_TYPE_MAX] = {
 
@@ -69,15 +69,15 @@ void Hand::SelectMyHand_UpdateCursorPos() {
 		if (_playerHandIndex >= HAND_TYPE_MAX) _playerHandIndex = HAND_TYPE_STONE;
 	}
 
-	PLAYER_CURSOR_POS = GUCHOKIPA_HANDPOS_TBL[_playerHandIndex];
+	_PLAYER_CURSOR_POS = GUCHOKIPA_HANDPOS_TBL[_playerHandIndex];
 
 
 	// カーソル表示
-	DrawRotaGraphF(PLAYER_CURSOR_POS.x + 25, PLAYER_CURSOR_POS.y + 165, 0.25f, 0, _gpc_cursor_hdl, true);
+	DrawRotaGraphF(_PLAYER_CURSOR_POS.x + 25, _PLAYER_CURSOR_POS.y + 165, 0.25f, 0, _gpc_cursor_hdl, true);
 }
 
 
-bool Hand::canSelectBossHand = true;
+bool Hand::_canSelectBossHand = true;
 
 
 void Hand::SubtractLosersHP(int& playerHP, int& bossHP) {
@@ -172,8 +172,6 @@ void Hand::AssignJankenResult() {
 	}
 }
 
-
-int Hand::_jankenResult;
 
 
 void Hand::RenderJankenResultImage() {

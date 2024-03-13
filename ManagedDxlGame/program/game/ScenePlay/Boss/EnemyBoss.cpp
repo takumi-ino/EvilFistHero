@@ -1,8 +1,10 @@
 #include <random>
+#include "../../../utility/tnlSequence.h"
 #include "../Hand/Hand.h"
+#include "EnemyBoss.h"
+#include "../Slider/SliderEvent.h"
 #include "../../SceneStageMap/Symbol/StageSymbol.h"
 #include "../../Manager/ImageManager/use/ImageManager.h"
-#include "EnemyBoss.h"
 
 
 int EnemyBoss::bossHP;
@@ -11,7 +13,7 @@ int EnemyBoss::bossHP;
 EnemyBoss::EnemyBoss(const int& stageId) {
 
 	LoadBackGround(stageId);
-	LoadBossImage(stageId);
+	LoadBossImage();
 }
 
 
@@ -28,9 +30,9 @@ struct EnemyBoss::BossImgInfo biInfo[] = {
 };
 
 
-void EnemyBoss::InitBossHP(const int& episodeID) {
+void EnemyBoss::InitBossHP(const int& _episodeID) {
 
-	switch (episodeID)
+	switch (_episodeID)
 	{
 	case StageSymbol::FOREST:
 		EnemyBoss::bossHP = 1;
@@ -54,9 +56,9 @@ void EnemyBoss::InitBossHP(const int& episodeID) {
 }
 
 
-void EnemyBoss::LoadBossImage(const int& stage_id) {
+void EnemyBoss::LoadBossImage() {
 
-	switch (StageSymbol::episodeID)
+	switch (StageSymbol::_episodeID)
 	{
 	case StageSymbol::FOREST:
 		bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Forest/デフォルト.png");
@@ -294,7 +296,7 @@ void EnemyBoss::SetBossHandProb_BySliderGrade(const SliderEvent* slider) {
 
 	SetFontSize(45);
 
-	switch (slider->slider_grade) 
+	switch (slider->GetSliderGrade()) 
 	{
 
 	case SliderEvent::SLIDER_GRADE_PERFECT:
@@ -346,19 +348,19 @@ void EnemyBoss::RenderBossHandProb(const SliderEvent* slider) {
 	// 手札の確率String
 	SetFontSize(50);
 
-	DrawFormatString(
+	DrawStringEx(
 		Hand::GUCHOKIPA_HANDPOS_TBL[0].x - 10,
 		Hand::GUCHOKIPA_HANDPOS_TBL[0].y - 65,
 		0xFFFACD,
 		boss_gcpHand_str[0].c_str()
 	);
-	DrawFormatString(
+	DrawStringEx(
 		Hand::GUCHOKIPA_HANDPOS_TBL[1].x - 10,
 		Hand::GUCHOKIPA_HANDPOS_TBL[1].y - 65,
 		0xFFFACD, 
 		boss_gcpHand_str[1].c_str()
 	);
-	DrawFormatString(
+	DrawStringEx(
 		Hand::GUCHOKIPA_HANDPOS_TBL[2].x - 10,
 		Hand::GUCHOKIPA_HANDPOS_TBL[2].y - 65,
 		0xFFFACD, 

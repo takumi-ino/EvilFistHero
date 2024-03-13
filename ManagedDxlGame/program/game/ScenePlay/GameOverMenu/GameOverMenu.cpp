@@ -20,22 +20,22 @@ int GameOverMenu::gameOverMenuIndex;
 
 void GameOverMenu::SelectGameOverMenu() {
 
-	for (int i = 0; i < MENU_MAX_NUM; i++) {
+	for (int i = 0; i < (int)GameOverMenu::NEXT::MAX_NUM; i++) {
 
 		DrawFormatString(gameOverMenuItems[i].x, gameOverMenuItems[i].y, GetColor(255, 255, 255), "E %s", gameOverMenuItems[i].name);
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP)) {
-		gameOverMenuIndex = (gameOverMenuIndex + (MENU_MAX_NUM - 1)) % MENU_MAX_NUM;
+		gameOverMenuIndex = (gameOverMenuIndex + ((int)GameOverMenu::NEXT::MAX_NUM - 1)) % (int)GameOverMenu::NEXT::MAX_NUM;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
-		gameOverMenuIndex = (gameOverMenuIndex + 1) % MENU_MAX_NUM;
+		gameOverMenuIndex = (gameOverMenuIndex + 1) % (int)GameOverMenu::NEXT::MAX_NUM;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP) || tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
 
-		for (int i = 0; i < MENU_MAX_NUM; i++) {
+		for (int i = 0; i < (int)GameOverMenu::NEXT::MAX_NUM; i++) {
 
 			if (i == gameOverMenuIndex) 
 				gameOverMenuItems[i].x = 90;
@@ -49,17 +49,17 @@ void GameOverMenu::SelectGameOverMenu() {
 
 void GameOverMenu::BranchProcess_ByGameOverMenu() {
 
-	switch (gameOverMenuIndex)
+	switch (static_cast<GameOverMenu::NEXT>(gameOverMenuIndex))
 	{
 
-	case GameOverMenu::MENU_RETRY:
+	case GameOverMenu::NEXT::RETRY:
 	{
 		if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
 			SoundManager::GetInstance().StopBGM();
 
 			auto scene = SceneManager::GetInstance();
-			scene->ChangeScene(new Scene_JankenBattle(StageSymbol::episodeID));
+			scene->ChangeScene(new Scene_JankenBattle(StageSymbol::_episodeID));
 
 			[](Scene_JankenBattle* j) {
 
@@ -72,7 +72,7 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 		}
 		break;
 	}
-	case RetryMenu::MENU_RETURNMAP:
+	case GameOverMenu::NEXT::RETURNMAP:
 	{
 		if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
@@ -83,7 +83,7 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 		}
 		break;
 	}
-	case RetryMenu::MENU_BACKTITLE:
+	case  GameOverMenu::NEXT::BACKTITLE:
 	{
 		if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 

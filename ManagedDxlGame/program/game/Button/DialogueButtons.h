@@ -1,6 +1,4 @@
 #pragma once
-#include "../../utility/DxLib_Engine.h"
-#include "../../utility/tnlSequence.h"
 #include <mutex>
 
 
@@ -8,7 +6,7 @@ class DialogueButtons
 {
 public:
 
-	enum class ButtonType_Dialogue {
+	enum class TYPE {
 
 		TITLE,
 		LOAD,
@@ -25,23 +23,23 @@ public:
 
 	// コピーコンストラクタ---------------------------------------------------
 	DialogueButtons(
-		int handle,
+		int _button_hdl,
 		int x, 
 		int y, 
-		int width,
-		int height,
+		int _button_width,
+		int _button_height,
 		float normalSize,
 		float zoomSize, 
-		ButtonType_Dialogue type
+		TYPE type
 	) 	:
-		handle(handle),
-		btnX1(x),
-		btnY1(y),
-		width(width),
-		height(height),
-		BUTTON_SIZE_NORMAL_DIALOGUE(normalSize),
-		BUTTON_SIZE_ZOOM_DIALOGUE(zoomSize),
-		type_dialogue(type)
+		_button_hdl(_button_hdl),
+		_button_x1(x),
+		_button_y1(y),
+		_button_width(_button_width),
+		_button_height(_button_height),
+		_BUTTON_SIZE_NORMAL_DIALOGUE(normalSize),
+		_BUTTON_SIZE_ZOOM_DIALOGUE(zoomSize),
+		_type_dialogue(type)
 	{}
 
 	//　初期化------------------------------------------------------------
@@ -62,37 +60,37 @@ public:
 	// 演算子オーバーロード------------------------------------------------
 	DialogueButtons& operator=(const DialogueButtons& b) {
 
-		handle = b.handle;
-		btnX1 = b.btnX1;
-		btnY1 = b.btnY1;
-		width = b.width;
-		height = b.height;
+		_button_hdl = b._button_hdl;
+		_button_x1 = b._button_x1;
+		_button_y1 = b._button_y1;
+		_button_width = b._button_width;
+		_button_height = b._button_height;
 		_currentSize = b._currentSize;
-		type_dialogue = b.type_dialogue;
+		_type_dialogue = b._type_dialogue;
 
 		return *this;
 	}
 
 private:
 
-	ButtonType_Dialogue type_dialogue{}; // ボタンの種類
+	TYPE _type_dialogue = DialogueButtons::TYPE::TITLE; // ボタンの種類
 
-	int   handle{}; // 画像のハンドル
-	int   width{};  // 幅
-	int   height{}; // 高さ
+	int   _button_hdl{};      // 画像のハンドル
+	int   _button_width{};    // 幅
+	int   _button_height{};   // 高さ
 
-	int   btnX1{};    // x座標
-	int   btnY1{};    // y座標
+	int   _button_x1{};       // x座標
+	int   _button_y1{};       // y座標
 
-	float _currentSize{};
-	float autoTimer = 0.0f;
+	float _currentSize{};     // ボタンサイズ
+	float _autoTimer = 0.0f;  // テキストオート機能のタイマー
 
 	// ボタンの拡大率
-	const float BUTTON_SIZE_NORMAL_DIALOGUE = 0.12f;
-	const float BUTTON_SIZE_ZOOM_DIALOGUE = 0.15f;
+	const float _BUTTON_SIZE_NORMAL_DIALOGUE = 0.12f;
+	const float _BUTTON_SIZE_ZOOM_DIALOGUE = 0.15f;
 
-	bool isShowStartAndBackButton{};
-	bool autoText{};
+	bool _isShowStartAndBackButton{};
+	bool _autoText{};
 
 private:
 

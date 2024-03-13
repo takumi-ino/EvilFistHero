@@ -1,15 +1,12 @@
 #pragma once
-#include "../../../utility/DxLib_Engine.h"
-#include "../../../utility/tnlSequence.h"
 #include "../../Button/DialogueButtons.h"
 
-class DialogueButtons;
 
 class StageSymbol
 {
 public:
 
-	static enum Symbol {
+	enum Symbol {
 
 		FOREST = 1,
 		VILLAGE,
@@ -22,17 +19,17 @@ public:
 	// コンストラクタ-------------------------------------------------------------------
 	StageSymbol(){}
 	StageSymbol(
-		const int handle,
+		const int _button_hdl,
 		const int x, 
 		const int y,
-		const int width,
-		const int height,
+		const int _button_width,
+		const int _button_height,
 		const float normalSize, 
 		const float zoomSize, 
 		const Symbol type
 	) :
-		_handle(handle),
-		_x1(x), _y1(y),
+		_symbol_hdl(_button_hdl),
+		_symbol_x1(x), _symbol_y1(y),
 		_normalSize(normalSize),
 		_zoomSize(zoomSize),
 		_type(type)
@@ -41,11 +38,11 @@ public:
 	// コピーコンストラクタ-------------------------------------------------------------
 	StageSymbol& operator=(const StageSymbol& ss) {
 
-		_handle = ss._handle;
-		_x1 = ss._x1;
-		_y1 = ss._y1;
-		_width = ss._width;
-		_height = ss._height;
+		_symbol_hdl = ss._symbol_hdl;
+		_symbol_x1 = ss._symbol_x1;
+		_symbol_y1 = ss._symbol_y1;
+		_symbol_width = ss._symbol_width;
+		_symbol_height = ss._symbol_height;
 		_type = ss._type;
 
 		return *this;
@@ -66,7 +63,7 @@ private:
 	void ZoomSymbolMark_OnMouse(StageSymbol& buttonInfo);
 
 	// マウスクリック
-	void ClickFunc_SymbolMark(const StageSymbol& buttonInfo);
+	void ClickSymbolMark(const StageSymbol& mark);
 
 	//　上記３つの関数をこの中で一括処理
 	void AddFuncsToSymbolButton();
@@ -77,56 +74,26 @@ private:
 
 public:
 
-	Symbol _type = Symbol::FOREST;
+	static int         _episodeID;
+	static const char* _EPISODE_TITLE;
 
-	static const char* EPISODE_TITLE;
-	static int         episodeID;
-
-	bool  onSelectedSymbol{};
-
-	const tnl::Vector3 FOREST_SYMBOL_POS =    { 357,  95, 0 };
-	const tnl::Vector3 VILLAGE_SYMBOL_POS =   { 787, 265, 0 };
-	const tnl::Vector3 CITY_SYMBOL_POS =      { 950, 580, 0 };
-	const tnl::Vector3 THEOCRACY_SYMBOL_POS = { 455, 680, 0 };
-	const tnl::Vector3 KINGDOM_SYMBOL_POS =   { 484, 285, 0 };
-	const tnl::Vector3 CONTINENT_SYMBOL_POS = { 235, 400, 0 };
-
-	const tnl::Vector3 _SYMBOL_POS_ALL[6] =
-	{
-		StageSymbol::FOREST_SYMBOL_POS,
-		StageSymbol::VILLAGE_SYMBOL_POS,
-		StageSymbol::CITY_SYMBOL_POS,
-		StageSymbol::THEOCRACY_SYMBOL_POS,
-		StageSymbol::KINGDOM_SYMBOL_POS,
-		StageSymbol::CONTINENT_SYMBOL_POS
-	};
+	bool               _onSelectedSymbol{};
 
 private:
 
-	int         _x1{};
-	int         _y1{};
-	int         _width = 20;
-	int         _height = 20;
+	Symbol _type = Symbol::FOREST;
 
-	int         _symbol_alpha = 255;
-	int         _handle{};
+	int           _symbol_x1{};
+	int           _symbol_y1{};
+	int           _symbol_width = 20;
+	int           _symbol_height = 20;
+	int           _symbol_alpha = 255;
+			    
+	int           _symbol_hdl{};
 
-	float       _normalSize = 0.09f;
-	float       _zoomSize = 0.12f;
-	float       _currentSize{};
+	const float   _normalSize = 0.09f;
+	const float   _zoomSize = 0.12f;
+	float         _currentSize{};
 
-	bool        _fadeIn_symbol = true;
-
-	static int  _buttonHandle_symbol[6];
-	const int   _SYMBOL_NUM = 6;
-	
-	const char* _buttonImgPath_symbol[6] =
-	{
-	"graphics/Symbols/Forest.png",
-	"graphics/Symbols/Village.png",
-	"graphics/Symbols/City.png",
-	"graphics/Symbols/Theocracy.png",
-	"graphics/Symbols/Kingdom.png",
-	"graphics/Symbols/Continent.png"
-	};
+	bool          _fadeIn_symbol = true;
 };

@@ -1,10 +1,8 @@
 #pragma once
 #include "../Manager/SceneManager/SceneBase.h"
 #include "Symbol/StageSymbol.h"
-#include "../ScenePlay/Boss/EnemyBoss.h"
-#include "../../utility/DxLib_Engine.h"
-#include "../../utility/tnlSequence.h"
 
+class EnemyBoss;
 
 class SceneStageMap : public SceneBase
 {
@@ -27,6 +25,7 @@ private:
 	// エンターキーでゲームスタート
 	void GameStartByInput();
 	
+	// 講師配布のライブラリ。メモリのロードなど1度だけ実行したい処理で Sequence クラスを使用
 	tnl::Sequence<SceneStageMap> _sequence = tnl::Sequence<SceneStageMap>(this, &SceneStageMap::SeqIdle);
 	bool SeqIdle(float deltaTime);
 

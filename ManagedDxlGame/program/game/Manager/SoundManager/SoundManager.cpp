@@ -1,4 +1,6 @@
+#include "../../../utility/DxLib_Engine.h"
 #include "SoundManager.h"
+#include "SoundType_BGM.h"
 
 
 void SoundManager::LoadBGM(const char* pathName) {

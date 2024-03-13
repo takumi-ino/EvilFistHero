@@ -1,11 +1,11 @@
+#include "../../utility/DxLib_Engine.h"
+#include "../../utility/tnlSequence.h"
 #include "DialogueButtons.h"
-#include "../SceneTitle/SceneTitle.h"
 #include "../SceneStageMap/SceneStageMap.h"
 #include "../Manager/ImageManager/use/ImageManager.h"
 #include "../Manager/SceneManager/SceneManager.h"
-#include "../Manager/SoundManager/SoundManager.h"
+#include "../SceneTitle/SceneTitle.h"
 #include "../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
-#include "../ScenePlay/Battle/Scene_JankenBattle.h"
 #include "../SceneStageMap/Symbol/StageSymbol.h"
 
 
@@ -40,16 +40,16 @@ std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton()
 
 	for (int i = 0; i < BUTTON_ALL_NUM_DIALOGUE; i++) {
 
-		int handle = LoadGraph(_buttonImgPath_dialogue[i]);
+		int _button_hdl = LoadGraph(_buttonImgPath_dialogue[i]);
 
 		int x = BUTTON_POS_X_DIALOGUE + i * BUTTON_INTERVAL_DIALOGUE;
 		int y = BUTTON_POS_Y_DIALOGUE;
 
-		width = 30, height = 15;
+		_button_width = 30, _button_height = 15;
 
-		ButtonType_Dialogue type = (ButtonType_Dialogue)i;
+		TYPE type = (TYPE)i;
 
-		buttonArray[i] = DialogueButtons(handle, x, y, width, height, BUTTON_SIZE_NORMAL_DIALOGUE, BUTTON_SIZE_ZOOM_DIALOGUE, type);
+		buttonArray[i] = DialogueButtons(_button_hdl, x, y, _button_width, _button_height, _BUTTON_SIZE_NORMAL_DIALOGUE, _BUTTON_SIZE_ZOOM_DIALOGUE, type);
 	}
 
 	return buttonArray;
@@ -75,7 +75,7 @@ void DialogueButtons::ManageDialogueButton() {
 		ZoomOnMouse_Dialogue(btn);
 		ClickOnButton_Dialogue(btn);
 
-		DrawRotaGraph(btn.btnX1, btn.btnY1, btn._currentSize, 0.0f, btn.handle, true);
+		DrawRotaGraph(btn._button_x1, btn._button_y1, btn._currentSize, 0.0f, btn._button_hdl, true);
 	}
 }
 
@@ -94,15 +94,15 @@ void DialogueButtons::ZoomOnMouse_Dialogue(DialogueButtons& btnInfo) {
 
 	GetMousePoint(&hoveredX, &hoveredY);
 
-	if (hoveredX >= btnInfo.btnX1 &&
-		hoveredX <= btnInfo.btnX1 + btnInfo.width && 
-		hoveredY >= btnInfo.btnY1 &&
-		hoveredY <= btnInfo.btnY1 + btnInfo.height)
+	if (hoveredX >= btnInfo._button_x1 &&
+		hoveredX <= btnInfo._button_x1 + btnInfo._button_width && 
+		hoveredY >= btnInfo._button_y1 &&
+		hoveredY <= btnInfo._button_y1 + btnInfo._button_height)
 	{
-		btnInfo._currentSize = btnInfo.BUTTON_SIZE_ZOOM_DIALOGUE;
+		btnInfo._currentSize = btnInfo._BUTTON_SIZE_ZOOM_DIALOGUE;
 	}
 	else {
-		btnInfo._currentSize = btnInfo.BUTTON_SIZE_NORMAL_DIALOGUE;
+		btnInfo._currentSize = btnInfo._BUTTON_SIZE_NORMAL_DIALOGUE;
 	}
 }
 
@@ -116,35 +116,35 @@ void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
 
 	if (GetMouseInput() && MOUSE_INPUT_LEFT) {
 
-		if (clickX_axis >= btnInfos.btnX1 && 
-			clickX_axis <= btnInfos.btnX1 + btnInfos.width &&
-			clickY_axis >= btnInfos.btnY1 && 
-			clickY_axis <= btnInfos.btnY1 + btnInfos.height)
+		if (clickX_axis >= btnInfos._button_x1 && 
+			clickX_axis <= btnInfos._button_x1 + btnInfos._button_width &&
+			clickY_axis >= btnInfos._button_y1 && 
+			clickY_axis <= btnInfos._button_y1 + btnInfos._button_height)
 		{
 			// ボタンの種類に応じて処理を分岐する
-			switch (btnInfos.type_dialogue) {
+			switch (btnInfos._type_dialogue) {
 
-			case ButtonType_Dialogue::TITLE: // TITLEボタン
+			case TYPE::TITLE: // TITLEボタン
 			{
 				auto scene = SceneManager::GetInstance();
 				scene->ChangeScene(new SceneTitle());
 
 				break;
 			}
-			case ButtonType_Dialogue::LOAD: // LOADボタン
+			case TYPE::LOAD: // LOADボタン
 			{
 				break;
 			}
-			case ButtonType_Dialogue::SAVE: // SAVEボタン
+			case TYPE::SAVE: // SAVEボタン
 			{
 				break;
 			}
-			case ButtonType_Dialogue::AUTO: // AUTOボタン
+			case TYPE::AUTO: // AUTOボタン
 			{
-				autoText = !autoText;
+				_autoText = !_autoText;
 				break;
 			}
-			case ButtonType_Dialogue::SKIP: // SKIPボタン
+			case TYPE::SKIP: // SKIPボタン
 			{
 				if (SceneConversation::Prologue_Epilogue == 1) {
 
@@ -162,11 +162,11 @@ void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
 
 				break;
 			}
-			case ButtonType_Dialogue::LOG: // LOGボタン
+			case TYPE::LOG: // LOGボタン
 			{
 				break;
 			}
-			case ButtonType_Dialogue::CONFIG: // CONFIGボタン
+			case TYPE::CONFIG: // CONFIGボタン
 			{
 				break;
 			}
@@ -179,13 +179,13 @@ void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
 
 void DialogueButtons::AutoDialogue() {
 
-	if (!autoText) 	return;
+	if (!_autoText) 	return;
 
-	autoTimer += 0.02f;
+	_autoTimer += 0.02f;
 
-	if (autoTimer >= 1.5f) {
+	if (_autoTimer >= 1.5f) {
 
 		SceneConversation::_CURRENT_TEXTROW++;
-		autoTimer = 0.0f;
+		_autoTimer = 0.0f;
 	}
 }

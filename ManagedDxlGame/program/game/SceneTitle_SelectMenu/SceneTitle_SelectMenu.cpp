@@ -1,7 +1,9 @@
+#include "../Manager/SceneManager/SceneManager.h"
 #include "SceneTitle_SelectMenu.h"
 #include "../SceneTitle/SceneTitle.h"
-#include "../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
 #include "../Button/DialogueButtons.h"
+#include "../Manager/SoundManager/SoundManager.h"
+#include "../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
 
 
 namespace {
@@ -22,25 +24,21 @@ struct SceneTitle_SelectMenu::SelectMenu selectItems[] =
 };
 
 
-bool SceneTitle_SelectMenu::SeqIdle(float deltaTime) {
+SceneTitle_SelectMenu::SceneTitle_SelectMenu() {
 
-	if (_sequence.isStart()) {
-
-		_bgImage_hdl = LoadGraph("graphics/TitleMenu.png");
-	}
-
-	return true;
+	_bgImage_hdl = LoadGraph("graphics/TitleMenu.png");
 }
-
 
 
 void SceneTitle_SelectMenu::SelectMenuByInput() {
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP)) {
+
 		_menu_index = (_menu_index + (_MENU_ALLITEM_NUM - 1)) % _MENU_ALLITEM_NUM;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
+
 		_menu_index = (_menu_index + 1) % _MENU_ALLITEM_NUM;
 	}
 
@@ -57,6 +55,7 @@ void SceneTitle_SelectMenu::SelectMenuByInput() {
 				sc = nullptr;
 				};
 
+			// プロローグからスタートに設定し直す
 			if (SceneConversation::Prologue_Epilogue != 0) {
 
 				SceneConversation::Prologue_Epilogue = 0;
@@ -98,13 +97,6 @@ void SceneTitle_SelectMenu::ShowMenu() {
 }
 
 
-void SceneTitle_SelectMenu::Update(float deltaTime) {
-
-	SelectMenuByInput();
-	_sequence.update(deltaTime);
-}
-
-
 void SceneTitle_SelectMenu::Render(float deltaTime) {
 
 	ShowMenu();
@@ -121,6 +113,12 @@ void SceneTitle_SelectMenu::Render(float deltaTime) {
 
 	SetFontSize(40);
 	DrawString(1070, 640, "Enter", -1);
+}
+
+
+void SceneTitle_SelectMenu::Update(float deltaTime) {
+
+	SelectMenuByInput();
 }
 
 

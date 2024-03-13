@@ -1,6 +1,4 @@
 #include "ImageManager.h"
-#include "BackGroundImages.h"
-#include "CharacterImages.h"
 
 
 // ”wŒi‰æ‘œƒ}ƒbƒv‚Ì Key

@@ -1,6 +1,4 @@
 #pragma once
-#include "../../../../utility/DxLib_Engine.h"
-#include "../../../../utility/tnlSequence.h"
 
 
 class CharacterImages {

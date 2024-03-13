@@ -1,4 +1,6 @@
 #include "SoundType_BGM.h"
+#include "../../../utility/tnlSequence.h"
+#include "../../../utility/DxLib_Engine.h"
 
 
 SoundType_BGM::SoundType_BGM(const char* path)

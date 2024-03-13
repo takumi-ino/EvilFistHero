@@ -1,8 +1,9 @@
+#include "../../utility/DxLib_Engine.h"
+#include "../../utility/tnlSequence.h"
 #include "SceneStageMap.h"
-#include "../SceneTitle/SceneTitle.h"
+#include "../ScenePlay/Boss/EnemyBoss.h"
 #include "../ScenePlay/Battle/Scene_JankenBattle.h"
 #include "../Manager/SoundManager/SoundManager.h"
-#include "../Manager/ImageManager/use/ImageManager.h"
 #include "../Manager/SceneManager/SceneManager.h"
 #include "../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
 
@@ -41,11 +42,6 @@ bool SceneStageMap::SeqIdle(float deltaTime) {
 }
 
 
-void SceneStageMap::Update(float deltaTime) {
-
-	_sequence.update(deltaTime);
-}
-
 
 void SceneStageMap::SetStageInfo_BeforeStartGame(const StageSymbol::Symbol symbol) {
 
@@ -64,7 +60,7 @@ void SceneStageMap::GameStartByInput() {
 
 		SoundManager::GetInstance().StopBGM();
 
-		switch (StageSymbol::episodeID)
+		switch (StageSymbol::_episodeID)
 		{
 		case StageSymbol::Symbol::FOREST:
 		{
@@ -109,7 +105,7 @@ void SceneStageMap::GameStartByInput() {
 	}
 	else if (tnl::Input::IsKeyDownTrigger(eKeys::KB_BACK)) {
 
-		_symbolRef_ptr->onSelectedSymbol = false;
+		_symbolRef_ptr->_onSelectedSymbol = false;
 	}
 }
 
@@ -117,7 +113,7 @@ void SceneStageMap::GameStartByInput() {
 
 void SceneStageMap::ShowFinalCheck_BeforeStartGame() {
 
-	if (!_symbolRef_ptr->onSelectedSymbol) {
+	if (!_symbolRef_ptr->_onSelectedSymbol) {
 
 		_symbolRef_ptr->RenderSymbolMark();
 	}
@@ -125,7 +121,7 @@ void SceneStageMap::ShowFinalCheck_BeforeStartGame() {
 
 		SetFontSize(55);
 		// エピソードタイトル表示
-		DrawStringEx(_EPISODE_TITLE_POS_X, _EPISODE_TITLE_POS_Y, -1, StageSymbol::EPISODE_TITLE);
+		DrawStringEx(_EPISODE_TITLE_POS_X, _EPISODE_TITLE_POS_Y, -1, StageSymbol::_EPISODE_TITLE);
 
 		SetFontSize(50);
 		DrawStringEx(350, 400, -1, "はじめる：Enter");
@@ -143,6 +139,12 @@ void SceneStageMap::Render(float deltaTime) {
 	DrawRotaGraph(_BG_IMAGE_POS_X, _BG_IMAGE_POS_Y, _BG_EXRATE, 0, _bgImage_hdl, true);
 
 	ShowFinalCheck_BeforeStartGame();
+}
+
+
+void SceneStageMap::Update(float deltaTime) {
+
+	_sequence.update(deltaTime);
 }
 
 
