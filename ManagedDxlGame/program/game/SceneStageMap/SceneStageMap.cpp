@@ -2,7 +2,7 @@
 #include "../../utility/tnlSequence.h"
 #include "SceneStageMap.h"
 #include "../ScenePlay/Boss/EnemyBoss.h"
-#include "../ScenePlay/Battle/Scene_JankenBattle.h"
+#include "../ScenePlay/Battle/ScenePlay.h"
 #include "../Manager/SoundManager/SoundManager.h"
 #include "../Manager/SceneManager/SceneManager.h"
 #include "../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
@@ -23,8 +23,7 @@ namespace {
 
 SceneStageMap::SceneStageMap() {
 
-	_bossRef_ptr = new EnemyBoss();
-	_symbolRef_ptr = new StageSymbol();
+	_symbolOfStageMap = new SymbolOfStageMap();
 }
 
 
@@ -32,7 +31,7 @@ bool SceneStageMap::SeqIdle(float deltaTime) {
 
 	if (_sequence.isStart()) {
 
-		_bgImage_hdl = LoadGraph("graphics/WorldMap.png");
+		_backGroundImage_hdl = LoadGraph("graphics/WorldMap.png");
 
 		SoundManager::GetInstance().LoadBGM("sound/BGM/WorldMap_BGM.mp3");
 		SoundManager::GetInstance().PlayBGM();
@@ -43,14 +42,16 @@ bool SceneStageMap::SeqIdle(float deltaTime) {
 
 
 
-void SceneStageMap::SetStageInfo_BeforeStartGame(const StageSymbol::Symbol symbol) {
+void SceneStageMap::ResetHP_BeforeStartGame(const SymbolOfStageMap::TYPE symbol) {
 
-	_bossRef_ptr->InitBossHP(symbol);
+	//　ボスHP初期化処理
+	EnemyBoss* boss = new EnemyBoss();
+	boss->InitBossHP(symbol);                  
+	delete boss;
+	boss = nullptr;
 
-	Scene_JankenBattle::InitPlayerHP();
-
-	auto scene = SceneManager::GetInstance();
-	scene->ChangeScene(new Scene_JankenBattle());
+	//　プレイヤーHP初期化
+	ScenePlay::InitPlayerHP();
 }
 
 
@@ -58,91 +59,113 @@ void SceneStageMap::GameStartByInput() {
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
-		SoundManager::GetInstance().StopBGM();
+		SoundManager::GetInstance().StopBGM();            // BGM停止
 
-		switch (StageSymbol::_episodeID)
+		switch (SymbolOfStageMap::_episodeID)
 		{
-		case StageSymbol::Symbol::FOREST:
+		case SymbolOfStageMap::TYPE::FOREST:
 		{
-			SetStageInfo_BeforeStartGame(StageSymbol::Symbol::FOREST);
+			ResetHP_BeforeStartGame(SymbolOfStageMap::TYPE::FOREST);
+			MoveToScenePlay();
 			break;
 		}
 
-		case StageSymbol::Symbol::VILLAGE:
+		case SymbolOfStageMap::TYPE::VILLAGE:
 		{
-			SetStageInfo_BeforeStartGame(StageSymbol::Symbol::VILLAGE);
+			ResetHP_BeforeStartGame(SymbolOfStageMap::TYPE::VILLAGE);
+			MoveToScenePlay();
 			break;
 		}
 
-		case StageSymbol::Symbol::CITY:
+		case SymbolOfStageMap::TYPE::CITY:
 		{
-			SetStageInfo_BeforeStartGame(StageSymbol::Symbol::CITY);
+			ResetHP_BeforeStartGame(SymbolOfStageMap::TYPE::CITY);
+			MoveToScenePlay();
 			break;
 		}
 
-		case StageSymbol::Symbol::THEOCRACY:
+		case SymbolOfStageMap::TYPE::THEOCRACY:
 		{
-			SetStageInfo_BeforeStartGame(StageSymbol::Symbol::THEOCRACY);
+			ResetHP_BeforeStartGame(SymbolOfStageMap::TYPE::THEOCRACY);
+			MoveToScenePlay();
 			break;
 		}
 
-		case StageSymbol::Symbol::KINGDOM:
+		case SymbolOfStageMap::TYPE::KINGDOM:
 		{
 			// エピローグからスタート
 			SceneConversation::Prologue_Epilogue = 1;
 
-			auto scene = SceneManager::GetInstance();
-			scene->ChangeScene(new SceneConversation());
+			MoveToScenePlay();
 			break;
 		}
-
-		case StageSymbol::Symbol::CONTINENT:
+		case SymbolOfStageMap::TYPE::CONTINENT:
 		{
-			SetStageInfo_BeforeStartGame(StageSymbol::Symbol::CONTINENT);
+			ResetHP_BeforeStartGame(SymbolOfStageMap::TYPE::CONTINENT);
+			MoveToScenePlay();
 			break;
 		}
 		}
 	}
 	else if (tnl::Input::IsKeyDownTrigger(eKeys::KB_BACK)) {
 
-		_symbolRef_ptr->_onSelectedSymbol = false;
+		_symbolOfStageMap->_onSelectedSymbol = false;
 	}
 }
 
 
+void SceneStageMap::MoveToScenePlay()
+{
+	auto scene = SceneManager::GetInstance();
+	scene->ChangeScene(new ScenePlay());
+}
+
 
 void SceneStageMap::ShowFinalCheck_BeforeStartGame() {
 
-	if (!_symbolRef_ptr->_onSelectedSymbol) {
+	if (!_symbolOfStageMap->_onSelectedSymbol) {
 
-		_symbolRef_ptr->RenderSymbolMark();
+		_symbolOfStageMap->RenderSymbolMark();
 	}
 	else {
 
 		SetFontSize(55);
 		// エピソードタイトル表示
-		DrawStringEx(_EPISODE_TITLE_POS_X, _EPISODE_TITLE_POS_Y, -1, StageSymbol::_EPISODE_TITLE);
+		DrawString(
+			_EPISODE_TITLE_POS_X,
+			_EPISODE_TITLE_POS_Y, 
+			SymbolOfStageMap::_EPISODE_TITLE,
+			-1
+		);
 
 		SetFontSize(50);
 		DrawStringEx(350, 400, -1, "はじめる：Enter");
 		DrawStringEx(350, 450, -1, "もどる：BackSpace");
 
+		// エンターでゲームスタート！
 		GameStartByInput();
 	}
 }
 
 
-void SceneStageMap::Render(float deltaTime) {
+void SceneStageMap::Render(const float deltaTime) {
 
 	SetDrawBright(255, 255, 255);
 
-	DrawRotaGraph(_BG_IMAGE_POS_X, _BG_IMAGE_POS_Y, _BG_EXRATE, 0, _bgImage_hdl, true);
+	DrawRotaGraph(
+		_BG_IMAGE_POS_X,
+		_BG_IMAGE_POS_Y,
+		_BG_EXRATE,
+		0,
+		_backGroundImage_hdl,
+		true
+	);
 
 	ShowFinalCheck_BeforeStartGame();
 }
 
 
-void SceneStageMap::Update(float deltaTime) {
+void SceneStageMap::Update(const float deltaTime) {
 
 	_sequence.update(deltaTime);
 }
@@ -150,9 +173,6 @@ void SceneStageMap::Update(float deltaTime) {
 
 void SceneStageMap::ReleaseMem() {
 
-	delete _bossRef_ptr;
-	_bossRef_ptr = nullptr;
-
-	delete _symbolRef_ptr;
-	_symbolRef_ptr = nullptr;
+	delete _symbolOfStageMap;
+	_symbolOfStageMap = nullptr;
 }

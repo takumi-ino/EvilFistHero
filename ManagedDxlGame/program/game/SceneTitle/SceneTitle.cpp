@@ -17,7 +17,7 @@ namespace {
 
 SceneTitle::SceneTitle() {
 
-	_bgImage_hdl = LoadGraph("graphics/Title.png");
+	_backGroundImage_hdl = LoadGraph("graphics/Title.png");
 	_logoImage_hdl = LoadGraph("graphics/TitleLogo.png");
 
 	SoundManager::GetInstance().LoadBGM("sound/BGM/Title_BGM.mp3");
@@ -25,9 +25,9 @@ SceneTitle::SceneTitle() {
 }
 
 
-void SceneTitle::Render(float deltaTime) {
+void SceneTitle::Render(const float deltaTime) {
 
-	DrawRotaGraph(_BG_X, _BG_Y, 0.8f, 0, _bgImage_hdl, true);
+	DrawRotaGraph(_BG_X, _BG_Y, 0.8f, 0, _backGroundImage_hdl, true);
 
 	DrawRotaGraph(_LOGO_X, _LOGO_Y, 2.0f, 0, _logoImage_hdl, true);
 
@@ -36,7 +36,7 @@ void SceneTitle::Render(float deltaTime) {
 }
 
 
-void SceneTitle::Update(float deltaTime) {
+void SceneTitle::Update(const float deltaTime) {
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
@@ -48,6 +48,6 @@ void SceneTitle::Update(float deltaTime) {
 
 void SceneTitle::ReleaseMem() {
 
-	DeleteGraph(_bgImage_hdl);
+	DeleteGraph(_backGroundImage_hdl);
 	DeleteGraph(_logoImage_hdl);
 }

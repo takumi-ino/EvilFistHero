@@ -4,17 +4,27 @@
 static constexpr int SLIDER_IMG_NUM = 11;
 
 
+/*/
+　　　         　　　　　　　　　ScenePlay のバトルで発生するスライダーイベント
+
+	     １. スライダーイベント　→　プレイヤーの手の選択　→　選択後の結果表示  の流れでバトルは進む
+		 ２. このスライダーによって敵が出す手の確率を推測することができる
+		 ３. スライダーイベントには４段階のグレードが存在する
+		 ４. 良いグレードを取れば敵が出す手をより推測しやすくなり、悪いグレードを取れば敵が出す手を推測しにくくなる
+*/
+
+
 class SliderEvent
 {
 public:
 
-	enum SliderGrade {
+	enum GRADE {
 
-		SLIDER_GRADE_PERFECT,
-		SLIDER_GRADE_GREAT,
-		SLIDER_GRADE_GOOD,
-		SLIDER_GRADE_BAD,
-		SLIDER_GRADE_MAXINDEX
+		PERFECT,
+		GREAT,
+		GOOD,
+		BAD,
+		MAXINDEX
 	};
 
 public:
@@ -32,7 +42,7 @@ public:
 	void LoadSliderHandle();
 
 	// スライダー起動。エピソードとボスのHPによってスライダーの速さが変化
-	void SliderFuncUpdate_PerFrame(const float deltaTime, const int _episodeID, const int bossHP);
+	void SliderFuncUpdate_PerFrame(const float deltaTime, const int episodeID, const int bossHP);
 
 	// スライダー成績取得
 	const int GetSliderGrade() const { return _slider_grade; }
@@ -45,7 +55,7 @@ private:
 	// スライダー成績設定
 	void SetSliderGrade();
 
-	void SliderAnimation(float deltaTime, const float _speed);
+	void SliderAnimation(const float deltaTime, const float speed);
 
 private:
 

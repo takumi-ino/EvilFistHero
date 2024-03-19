@@ -2,7 +2,7 @@
 #include "../../Manager/SceneManager/SceneManager.h"
 #include "../../Manager/SoundManager/SoundManager.h"
 #include "../../SceneStageMap/SceneStageMap.h"
-#include "../../ScenePlay/Battle/Scene_JankenBattle.h"
+#include "../../ScenePlay/Battle/ScenePlay.h"
 #include "../../SceneTitle/SceneTitle.h"
 #include "../../../utility/DxLib_Engine.h"
 
@@ -59,11 +59,11 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 			SoundManager::GetInstance().StopBGM();
 
 			auto scene = SceneManager::GetInstance();
-			scene->ChangeScene(new Scene_JankenBattle(StageSymbol::_episodeID));
+			scene->ChangeScene(new ScenePlay(SymbolOfStageMap::_episodeID));
 
-			[](Scene_JankenBattle* j) {
+			[](ScenePlay* j) {
 
-				j = new Scene_JankenBattle();
+				j = new ScenePlay();
 				j->ResetGame();
 
 				delete j;

@@ -26,7 +26,7 @@ struct SceneTitle_SelectMenu::SelectMenu selectItems[] =
 
 SceneTitle_SelectMenu::SceneTitle_SelectMenu() {
 
-	_bgImage_hdl = LoadGraph("graphics/TitleMenu.png");
+	_backGroundImage_hdl = LoadGraph("graphics/TitleMenu.png");
 }
 
 
@@ -34,17 +34,19 @@ void SceneTitle_SelectMenu::SelectMenuByInput() {
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP)) {
 
-		_menu_index = (_menu_index + (_MENU_ALLITEM_NUM - 1)) % _MENU_ALLITEM_NUM;
+		_menuIndex--;
+		if (_menuIndex < 0) _menuIndex = _MENU_ALLITEM_NUM - 1;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
 
-		_menu_index = (_menu_index + 1) % _MENU_ALLITEM_NUM;
+		_menuIndex++;
+		if (_menuIndex >= _MENU_ALLITEM_NUM) _menuIndex = 0;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
-		if (0 == _menu_index) {
+		if (0 == _menuIndex) {
 
 			// ステージマップで表示するシンボルを初期化
 			[](DialogueButtons* sc) {
@@ -67,12 +69,12 @@ void SceneTitle_SelectMenu::SelectMenuByInput() {
 			auto scene = SceneManager::GetInstance();
 			scene->ChangeScene(new SceneConversation());
 		}
-		else if (1 == _menu_index) {
+		else if (1 == _menuIndex) {
 
 			// ゲーム終了
 			DxLib_End();
 		}
-		else if (2 == _menu_index) {
+		else if (2 == _menuIndex) {
 
 			//　タイトルに戻る
 			auto scene = SceneManager::GetInstance();
@@ -83,40 +85,40 @@ void SceneTitle_SelectMenu::SelectMenuByInput() {
 	// 選択中の項目の座標を移動
 	for (int i = 0; i < _MENU_ALLITEM_NUM; i++) {
 
-		if (i == _menu_index)
-			selectItems[i].menu_x = 90;
+		if (i == _menuIndex)
+			selectItems[i].posX = 90;
 		else
-			selectItems[i].menu_x = 110;
+			selectItems[i].posX = 110;
 	}
 }
 
 
 void SceneTitle_SelectMenu::ShowMenu() {
 
-	DrawRotaGraph(300, 325, 1.0f, 0, _bgImage_hdl, true);
-}
-
-
-void SceneTitle_SelectMenu::Render(float deltaTime) {
-
-	ShowMenu();
+	DrawRotaGraph(300, 325, 1.0f, 0, _backGroundImage_hdl, true);
 
 	for (int i = 0; i < _MENU_ALLITEM_NUM; i++) {
 
 		DrawFormatString(
-			selectItems[i].menu_x,
-			selectItems[i].menu_y,
+			selectItems[i].posX,
+			selectItems[i].posY,
 			GetColor(255, 255, 255),
-			"・ %s", selectItems[i].menu_name
+			"・ %s", selectItems[i].name
 		);
 	}
+}
+
+
+void SceneTitle_SelectMenu::Render(const float deltaTime) {
+
+	ShowMenu();
 
 	SetFontSize(40);
 	DrawString(1070, 640, "Enter", -1);
 }
 
 
-void SceneTitle_SelectMenu::Update(float deltaTime) {
+void SceneTitle_SelectMenu::Update(const float deltaTime) {
 
 	SelectMenuByInput();
 }
@@ -124,5 +126,5 @@ void SceneTitle_SelectMenu::Update(float deltaTime) {
 
 void SceneTitle_SelectMenu::ReleaseMem() {
 
-	DeleteGraph(_bgImage_hdl);
+	DeleteGraph(_backGroundImage_hdl);
 }

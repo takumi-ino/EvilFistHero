@@ -1,5 +1,13 @@
 #pragma once
 
+/*
+         　メニュー選択クラス（　SceneTitleの次　）
+
+	  ・ゲーム開始
+	  ・ゲーム終了
+	  ・戻る	  　　の３つのみ
+*/
+
 
 class SceneTitle_SelectMenu : public SceneBase
 {
@@ -7,8 +15,8 @@ public:
 
 	SceneTitle_SelectMenu();
 
-	void Update(float deltaTime) override;
-	void Render(float deltaTime) override;
+	void Update(const float deltaTime) override;
+	void Render(const float deltaTime) override;
 	void ReleaseMem() override;
 
 private:
@@ -21,13 +29,14 @@ public:
 
 	typedef struct {
 
-		int  menu_x;          // 文字列座標 X
-		int  menu_y;          // 文字列座標 Y
-		char menu_name[128];  // 文字列名
-	}SelectMenu;
+		int  posX;       // 文字列座標 X
+		int  posY;       // 文字列座標 Y
+		char name[128];  // 文字列名
+	}
+	SelectMenu;
 
 private:
 
-	int       _bgImage_hdl{};
-	int       _menu_index{};
+	int       _backGroundImage_hdl{};
+	int       _menuIndex{};
 };

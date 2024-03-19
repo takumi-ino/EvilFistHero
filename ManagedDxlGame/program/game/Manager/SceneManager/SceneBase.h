@@ -3,8 +3,11 @@
 class SceneBase
 {
 public:
+
+	virtual ~SceneBase(){}
+
 	virtual void Initialize() {}
-	virtual void Update(float delta_time) {}
-	virtual void Render(float delta_time) {}
+	virtual void Update(const float deltaTime) {}
+	virtual void Render(const float deltaTime) {}
 	virtual void ReleaseMem() {}
 };

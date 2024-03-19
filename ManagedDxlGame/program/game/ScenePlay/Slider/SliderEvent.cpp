@@ -26,9 +26,9 @@ void SliderEvent::LoadSliderHandle() {
 }
 
 
-void SliderEvent::SliderAnimation(float deltaTime, const float _speed) {
+void SliderEvent::SliderAnimation(const float deltaTime, const float speed) {
 
-	_slider_timeCount += deltaTime * _speed;
+	_slider_timeCount += deltaTime * speed;
 
 	if (_slider_timeCount > SLIDER_INTERVAL) {
 
@@ -85,26 +85,26 @@ void SliderEvent::SetSliderGrade() {
 	switch (_slider_imageIndex) {
 
 	case 0:
-		_slider_grade = SliderGrade::SLIDER_GRADE_PERFECT;
+		_slider_grade = GRADE::PERFECT;
 		_slider_color = GetColor(255, 165, 0);
 		_slider_x1 = 500;
 		break;
 	case 1:
 	case 2:
 	case 3:
-		_slider_grade = SliderGrade::SLIDER_GRADE_GREAT;
+		_slider_grade = GRADE::GREAT;
 		_slider_color = GetColor(0, 240, 0);
 		_slider_x1 = 530;
 		break;
 	case 4:
 	case 5:
 	case 6:
-		_slider_grade = SliderGrade::SLIDER_GRADE_GOOD;
+		_slider_grade = GRADE::GOOD;
 		_slider_color = GetColor(245, 245, 245);
 		_slider_x1 = 540;
 		break;
 	default:
-		_slider_grade = SliderGrade::SLIDER_GRADE_BAD;
+		_slider_grade = GRADE::BAD;
 		_slider_color = GetColor(100, 100, 100);
 		_slider_x1 = 570;
 		break;
@@ -119,19 +119,19 @@ void SliderEvent::ShowSliderGrade() {
 
 	switch (_slider_grade) {
 
-	case SliderGrade::SLIDER_GRADE_PERFECT:
+	case GRADE::PERFECT:
 
 		DrawString(_slider_x1, slider_y, "PERFECT!", _slider_color);
 		break;
-	case SliderGrade::SLIDER_GRADE_GREAT:
+	case GRADE::GREAT:
 
 		DrawString(_slider_x1, slider_y, "GREAT!", _slider_color);
 		break;
-	case SliderGrade::SLIDER_GRADE_GOOD:
+	case GRADE::GOOD:
 
 		DrawString(_slider_x1, slider_y, "GOOD", _slider_color);
 		break;
-	case SliderGrade::SLIDER_GRADE_BAD:
+	case GRADE::BAD:
 
 		DrawString(_slider_x1, slider_y, "BAD", _slider_color);
 		break;

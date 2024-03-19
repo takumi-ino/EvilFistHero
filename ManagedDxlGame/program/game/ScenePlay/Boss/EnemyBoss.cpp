@@ -3,23 +3,23 @@
 #include "../Hand/Hand.h"
 #include "EnemyBoss.h"
 #include "../Slider/SliderEvent.h"
-#include "../../SceneStageMap/Symbol/StageSymbol.h"
+#include "../../SceneStageMap/Symbol/SymbolOfStageMap.h"
 #include "../../Manager/ImageManager/use/ImageManager.h"
 
 
-int EnemyBoss::bossHP;
+int EnemyBoss::_bossHP;
 
 
-EnemyBoss::EnemyBoss(const int& stageId) {
+EnemyBoss::EnemyBoss(const int stageId) {
 
 	LoadBackGround(stageId);
 	LoadBossImage();
 }
 
 
-struct EnemyBoss::BossImgInfo biInfo[] = {
+struct EnemyBoss::BossImageInfo bossImageInfo[] = {
 
-	// x, y, exRate, angle
+	// 左から　x, y, exRate, angle
 
 	{600,240,0.95f,0.0f}, // FOREST
 	{600,220,0.95f,0.0f}, // VILLAGE
@@ -30,27 +30,27 @@ struct EnemyBoss::BossImgInfo biInfo[] = {
 };
 
 
-void EnemyBoss::InitBossHP(const int& _episodeID) {
+void EnemyBoss::InitBossHP(const int episodeID) {
 
-	switch (_episodeID)
+	switch (episodeID)
 	{
-	case StageSymbol::FOREST:
-		EnemyBoss::bossHP = 1;
+	case SymbolOfStageMap::FOREST:
+		EnemyBoss::_bossHP = 1;
 		break;
-	case StageSymbol::VILLAGE:
-		EnemyBoss::bossHP = 2;
+	case SymbolOfStageMap::VILLAGE:
+		EnemyBoss::_bossHP = 2;
 		break;
-	case StageSymbol::CITY:
-		EnemyBoss::bossHP = 3;
+	case SymbolOfStageMap::CITY:
+		EnemyBoss::_bossHP = 3;
 		break;
-	case StageSymbol::THEOCRACY:
-		EnemyBoss::bossHP = 4;
+	case SymbolOfStageMap::THEOCRACY:
+		EnemyBoss::_bossHP = 4;
 		break;
-	case StageSymbol::KINGDOM:
-		EnemyBoss::bossHP = 5;
+	case SymbolOfStageMap::KINGDOM:
+		EnemyBoss::_bossHP = 5;
 		break;
-	case StageSymbol::CONTINENT:
-		EnemyBoss::bossHP = 6;
+	case SymbolOfStageMap::CONTINENT:
+		EnemyBoss::_bossHP = 6;
 		break;
 	}
 }
@@ -58,39 +58,44 @@ void EnemyBoss::InitBossHP(const int& _episodeID) {
 
 void EnemyBoss::LoadBossImage() {
 
-	switch (StageSymbol::_episodeID)
+	switch (SymbolOfStageMap::_episodeID)
 	{
-	case StageSymbol::FOREST:
-		bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Forest/デフォルト.png");
+	case SymbolOfStageMap::FOREST:
+		_bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Forest/デフォルト.png");
 		break;
-	case StageSymbol::VILLAGE:
-		bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Village/デフォルト.png");
-		bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Village/oneHit.png");
+
+	case SymbolOfStageMap::VILLAGE:
+		_bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Village/デフォルト.png");
+		_bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Village/oneHit.png");
 
 		break;
-	case StageSymbol::CITY:
-		bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_City/デフォルト.png");
-		bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_City/oneHit.png");
-		bossImg_twoHit_hdl = LoadGraph("graphics/CharacterImg/Boss_City/twoHit.png");
+
+	case SymbolOfStageMap::CITY:
+		_bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_City/デフォルト.png");
+		_bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_City/oneHit.png");
+		_bossImg_twoHit_hdl = LoadGraph("graphics/CharacterImg/Boss_City/twoHit.png");
 
 		break;
-	case StageSymbol::THEOCRACY:
-		bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/デフォルト.png");
-		bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/oneHit.png");
-		bossImg_twoHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/twoHit.png");
-		bossImg_threeHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/threeHit.png");
+
+	case SymbolOfStageMap::THEOCRACY:
+		_bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/デフォルト.png");
+		_bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/oneHit.png");
+		_bossImg_twoHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/twoHit.png");
+		_bossImg_threeHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Theocracy/threeHit.png");
 
 		break;
-	case StageSymbol::KINGDOM:
-		bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/デフォルト.png");
-		bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/oneHit.png");
-		bossImg_twoHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/twoHit.png");
-		bossImg_threeHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/threeHit.png");
-		bossImg_fourHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/fourHit.png");
+
+	case SymbolOfStageMap::KINGDOM:
+		_bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/デフォルト.png");
+		_bossImg_oneHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/oneHit.png");
+		_bossImg_twoHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/twoHit.png");
+		_bossImg_threeHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/threeHit.png");
+		_bossImg_fourHit_hdl = LoadGraph("graphics/CharacterImg/Boss_Kingdom/fourHit.png");
 
 		break;
-	case StageSymbol::CONTINENT:
-		bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Continent/デフォルト.png");
+
+	case SymbolOfStageMap::CONTINENT:
+		_bossImg_default_hdl = LoadGraph("graphics/CharacterImg/Boss_Continent/デフォルト.png");
 
 		break;
 	}
@@ -98,36 +103,36 @@ void EnemyBoss::LoadBossImage() {
 
 
 
-void EnemyBoss::LoadBackGround(const int& stage_id) {
+void EnemyBoss::LoadBackGround(const int stageId) {
 
-	switch (stage_id)
+	switch (stageId)
 	{
-	case StageSymbol::Symbol::FOREST: // 森のシンボル
+	case SymbolOfStageMap::TYPE::FOREST:  // 森のシンボル
 	{
 		ImageManager::GetInstance().LoadBackGroundImage("ステージ1");
 		break;
 	}
-	case StageSymbol::Symbol::VILLAGE: // 村のシンボル
+	case SymbolOfStageMap::TYPE::VILLAGE: // 村のシンボル
 	{
 		ImageManager::GetInstance().LoadBackGroundImage("ステージ2");
 		break;
 	}
-	case StageSymbol::Symbol::CITY: // 都市のシンボル
+	case SymbolOfStageMap::TYPE::CITY:    // 都市のシンボル
 	{
 		ImageManager::GetInstance().LoadBackGroundImage("ステージ3");
 		break;
 	}
-	case StageSymbol::Symbol::THEOCRACY: // 神政国家のシンボル
+	case SymbolOfStageMap::TYPE::THEOCRACY: // 神政国家のシンボル
 	{
 		ImageManager::GetInstance().LoadBackGroundImage("ステージ4");
 		break;
 	}
-	case StageSymbol::Symbol::KINGDOM: // 王国のシンボル
+	case SymbolOfStageMap::TYPE::KINGDOM:   // 王国のシンボル
 	{
 		ImageManager::GetInstance().LoadBackGroundImage("ステージ5");
 		break;
 	}
-	case StageSymbol::Symbol::CONTINENT: // 大陸のシンボル
+	case SymbolOfStageMap::TYPE::CONTINENT: // 大陸のシンボル
 	{
 		ImageManager::GetInstance().LoadBackGroundImage("ラストステージ");
 		break;
@@ -137,36 +142,36 @@ void EnemyBoss::LoadBackGround(const int& stage_id) {
 
 
 
-void EnemyBoss::RenderBackGround(const int& stage_id) {
+void EnemyBoss::RenderBackGround(const int stageId) {
 
-	switch (stage_id)
+	switch (stageId)
 	{
-	case StageSymbol::Symbol::FOREST: // 森のシンボル
+	case SymbolOfStageMap::TYPE::FOREST: // 森のシンボル
 	{
 		ImageManager::GetInstance().RenderBackGroundImage(0, 0, 1.5f, 0);
 		break;
 	}
-	case StageSymbol::Symbol::VILLAGE: // 村のシンボル
+	case SymbolOfStageMap::TYPE::VILLAGE: // 村のシンボル
 	{
 		ImageManager::GetInstance().RenderBackGroundImage(15, 15, 1.0f, 0);
 		break;
 	}
-	case StageSymbol::Symbol::CITY: // 都市のシンボル
+	case SymbolOfStageMap::TYPE::CITY: // 都市のシンボル
 	{
 		ImageManager::GetInstance().RenderBackGroundImage(635, 0, 1.5f, 0);
 		break;
 	}
-	case StageSymbol::Symbol::THEOCRACY: // 神政国家のシンボル
+	case SymbolOfStageMap::TYPE::THEOCRACY: // 神政国家のシンボル
 	{
 		ImageManager::GetInstance().RenderBackGroundImage(600, 190, 1.0f, 0);
 		break;
 	}
-	case StageSymbol::Symbol::KINGDOM: // 王国のシンボル
+	case SymbolOfStageMap::TYPE::KINGDOM: // 王国のシンボル
 	{
 		ImageManager::GetInstance().RenderBackGroundImage(635, 400, 1.5f, 0);
 		break;
 	}
-	case StageSymbol::Symbol::CONTINENT: // 大陸のシンボル
+	case SymbolOfStageMap::TYPE::CONTINENT: // 大陸のシンボル
 	{
 		ImageManager::GetInstance().RenderBackGroundImage(500, 400, 1.0f, 0);
 		break;
@@ -176,108 +181,215 @@ void EnemyBoss::RenderBackGround(const int& stage_id) {
 
 
 
-void EnemyBoss::RenderBossEnemy(const int& stage_id) {
+void EnemyBoss::RenderBossEnemy(const int stageId) {
 
-	switch (stage_id)
+	// 現在HPが減るごとに表情が変わる。
+
+
+	switch (stageId)
 	{
-	case StageSymbol::FOREST:
+		// ステージ１
+	case SymbolOfStageMap::FOREST:
 		DrawRotaGraph(
-			biInfo[0].x, biInfo[0].y, biInfo[0].exRate, biInfo[0].angle, bossImg_default_hdl, true);
+			bossImageInfo[0].x, 
+			bossImageInfo[0].y, 
+			bossImageInfo[0].exRate,
+			bossImageInfo[0].angle,
+			_bossImg_default_hdl,
+			true
+		);
 		break;
 
-	case StageSymbol::VILLAGE:
-		switch (EnemyBoss::bossHP) {
+		// ステージ２
+	case SymbolOfStageMap::VILLAGE:
+		switch (EnemyBoss::_bossHP) {
 		case 2:
 			DrawRotaGraph(
-				biInfo[1].x, biInfo[1].y, biInfo[1].exRate, biInfo[1].angle, bossImg_default_hdl, true);
+				bossImageInfo[1].x,
+				bossImageInfo[1].y, 
+				bossImageInfo[1].exRate,
+				bossImageInfo[1].angle,
+				_bossImg_default_hdl,
+				true
+			);
 			break;
 		case 1:
 			DrawRotaGraph(
-				biInfo[1].x, biInfo[1].y, biInfo[1].exRate, biInfo[1].angle, bossImg_oneHit_hdl, true);
+				bossImageInfo[1].x,
+				bossImageInfo[1].y,
+				bossImageInfo[1].exRate, 
+				bossImageInfo[1].angle,
+				_bossImg_oneHit_hdl,
+				true
+			);
 			break;
 		}
 		break;
 
-	case StageSymbol::CITY:
-		switch (EnemyBoss::bossHP) {
+		// ステージ３
+	case SymbolOfStageMap::CITY:
+		switch (EnemyBoss::_bossHP) {
 		case 3:
 			DrawRotaGraph(
-				biInfo[2].x, biInfo[2].y, biInfo[2].exRate, biInfo[2].angle, bossImg_default_hdl, true);
+				bossImageInfo[2].x,
+				bossImageInfo[2].y,
+				bossImageInfo[2].exRate,
+				bossImageInfo[2].angle, 
+				_bossImg_default_hdl, 
+				true
+			);
 			break;
 		case 2:
 			DrawRotaGraph(
-				biInfo[2].x, biInfo[2].y, biInfo[2].exRate, biInfo[2].angle, bossImg_oneHit_hdl, true);
+				bossImageInfo[2].x,
+				bossImageInfo[2].y, 
+				bossImageInfo[2].exRate, 
+				bossImageInfo[2].angle,
+				_bossImg_oneHit_hdl,
+				true
+			);
 			break;
 		case 1:
 			DrawRotaGraph(
-				biInfo[2].x, biInfo[2].y, biInfo[2].exRate, biInfo[2].angle, bossImg_twoHit_hdl, true);
+				bossImageInfo[2].x,
+				bossImageInfo[2].y, 
+				bossImageInfo[2].exRate, 
+				bossImageInfo[2].angle,
+				_bossImg_twoHit_hdl, 
+				true
+			);
 			break;
 		}
 		break;
 
-	case StageSymbol::THEOCRACY:
+		// ステージ４
+	case SymbolOfStageMap::THEOCRACY:
 
-		switch (EnemyBoss::bossHP) {
+		switch (EnemyBoss::_bossHP) {
 		case 4:
 			DrawRotaGraph(
-				biInfo[3].x, biInfo[3].y, biInfo[3].exRate, biInfo[3].angle, bossImg_default_hdl, true);
+				bossImageInfo[3].x,
+				bossImageInfo[3].y, 
+				bossImageInfo[3].exRate,
+				bossImageInfo[3].angle,
+				_bossImg_default_hdl,
+				true
+			);
 			break;
 		case 3:
 			DrawRotaGraph(
-				biInfo[3].x, biInfo[3].y, biInfo[3].exRate, biInfo[3].angle, bossImg_oneHit_hdl, true);
+				bossImageInfo[3].x,
+				bossImageInfo[3].y, 
+				bossImageInfo[3].exRate, 
+				bossImageInfo[3].angle,
+				_bossImg_oneHit_hdl,
+				true
+			);
 			break;
 		case 2:
 			DrawRotaGraph(
-				biInfo[3].x, biInfo[3].y, biInfo[3].exRate, biInfo[3].angle, bossImg_twoHit_hdl, true);
+				bossImageInfo[3].x,
+				bossImageInfo[3].y,
+				bossImageInfo[3].exRate,
+				bossImageInfo[3].angle,
+				_bossImg_twoHit_hdl, 
+				true
+			);
 			break;
 		case 1:
 			DrawRotaGraph(
-				biInfo[3].x, biInfo[3].y, biInfo[3].exRate, biInfo[3].angle, bossImg_threeHit_hdl, true);
+				bossImageInfo[3].x,
+				bossImageInfo[3].y,
+				bossImageInfo[3].exRate,
+				bossImageInfo[3].angle,
+				_bossImg_threeHit_hdl,
+				true
+			);
 			break;
 		}
 		break;
 
-	case StageSymbol::KINGDOM:
-		switch (EnemyBoss::bossHP) {
+		// ステージ５
+	case SymbolOfStageMap::KINGDOM:
+		switch (EnemyBoss::_bossHP) {
 		case 5:
 			DrawRotaGraph(
-				biInfo[4].x, biInfo[4].y, biInfo[4].exRate, biInfo[4].angle, bossImg_default_hdl, true);
+				bossImageInfo[4].x,
+				bossImageInfo[4].y,
+				bossImageInfo[4].exRate,
+				bossImageInfo[4].angle, 
+				_bossImg_default_hdl,
+				true
+			);
 			break;
 		case 4:
 			DrawRotaGraph(
-				biInfo[4].x, biInfo[4].y, biInfo[4].exRate, biInfo[4].angle, bossImg_oneHit_hdl, true);
+				bossImageInfo[4].x,
+				bossImageInfo[4].y, 
+				bossImageInfo[4].exRate,
+				bossImageInfo[4].angle,
+				_bossImg_oneHit_hdl,
+				true
+			);
 			break;
 		case 3:
 			DrawRotaGraph(
-				biInfo[4].x, biInfo[4].y, biInfo[4].exRate, biInfo[4].angle, bossImg_twoHit_hdl, true);
+				bossImageInfo[4].x, 
+				bossImageInfo[4].y,
+				bossImageInfo[4].exRate,
+				bossImageInfo[4].angle,
+				_bossImg_twoHit_hdl, 
+				true
+			);
 			break;
 		case 2:
 			DrawRotaGraph(
-				biInfo[4].x, biInfo[4].y, biInfo[4].exRate, biInfo[4].angle, bossImg_threeHit_hdl, true);
+				bossImageInfo[4].x, 
+				bossImageInfo[4].y, 
+				bossImageInfo[4].exRate,
+				bossImageInfo[4].angle,
+				_bossImg_threeHit_hdl,
+				true
+			);
 			break;
 		case 1:
 			DrawRotaGraph(
-				biInfo[4].x, biInfo[4].y, biInfo[4].exRate, biInfo[4].angle, bossImg_fourHit_hdl, true);
+				bossImageInfo[4].x,
+				bossImageInfo[4].y, 
+				bossImageInfo[4].exRate,
+				bossImageInfo[4].angle,
+				_bossImg_fourHit_hdl,
+				true
+			);
 			break;
 		}
 		break;
 
-	case StageSymbol::CONTINENT:
+		// ステージ６
+	case SymbolOfStageMap::CONTINENT:
 		DrawRotaGraph(
-			biInfo[5].x, biInfo[5].y, biInfo[5].exRate, biInfo[5].angle, bossImg_default_hdl, true);
+			bossImageInfo[5].x,
+			bossImageInfo[5].y,
+			bossImageInfo[5].exRate,
+			bossImageInfo[5].angle, 
+			_bossImg_default_hdl, 
+			true
+		);
 		break;
 	}
 }
 
 
+
 void EnemyBoss::RenderBossHP() {
 
 	SetFontSize(30);
-	DrawFormatString(1050, 20, 0xFFFF0000, "EnemyHP:%d", EnemyBoss::bossHP);
+	DrawFormatString(1050, 20, 0xFFFF0000, "EnemyHP:%d", EnemyBoss::_bossHP);
 }
 
 
-void EnemyBoss::Shuffle_BossHandProbTable() {
+
+void EnemyBoss::ShuffleBossHandProbabilityTable() {
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -285,101 +397,158 @@ void EnemyBoss::Shuffle_BossHandProbTable() {
 	std::uniform_int_distribution<int> rateDistribution(1, 10);
 	int randomValue = rateDistribution(gen);
 
-	std::shuffle(Hand::HAND_PROB_ARY_EACH_GRADE[0].begin(), Hand::HAND_PROB_ARY_EACH_GRADE[0].end(), gen);
-	std::shuffle(Hand::HAND_PROB_ARY_EACH_GRADE[1].begin(), Hand::HAND_PROB_ARY_EACH_GRADE[1].end(), gen);
-	std::shuffle(Hand::HAND_PROB_ARY_EACH_GRADE[2].begin(), Hand::HAND_PROB_ARY_EACH_GRADE[2].end(), gen);
-	std::shuffle(Hand::HAND_PROB_ARY_EACH_GRADE[3].begin(), Hand::HAND_PROB_ARY_EACH_GRADE[3].end(), gen);
+	std::shuffle(
+		Hand::_bossHandProbabilitiesByGrade[0].begin(),
+		Hand::_bossHandProbabilitiesByGrade[0].end(), 
+		gen
+	);
+	std::shuffle(
+		Hand::_bossHandProbabilitiesByGrade[1].begin(),
+		Hand::_bossHandProbabilitiesByGrade[1].end(),
+		gen
+	);
+	std::shuffle(
+		Hand::_bossHandProbabilitiesByGrade[2].begin(),
+		Hand::_bossHandProbabilitiesByGrade[2].end(), 
+		gen
+	);
+	std::shuffle(
+		Hand::_bossHandProbabilitiesByGrade[3].begin(),
+		Hand::_bossHandProbabilitiesByGrade[3].end(), 
+		gen
+	);
 }
 
 
-void EnemyBoss::SetBossHandProb_BySliderGrade(const SliderEvent* slider) {
+void EnemyBoss::SetBossHandProbability_BySliderGrade(const SliderEvent* slider) {
+
+	// スライダーイベントの成績によって、以下の対応表から数値が格納される
+
+	//{ 70, 20, 10 }  　// PERFECT
+	//{ 50,30,20 }　　　// GREAT
+	//{ 40,40,20 }　 　 // GOOD
+	//{ 34,33,33 } 　　 // BAD
 
 	SetFontSize(45);
 
 	switch (slider->GetSliderGrade()) 
 	{
+	//　パーフェクト
+	case SliderEvent::PERFECT:
 
-	case SliderEvent::SLIDER_GRADE_PERFECT:
+		Hand::_guHandProbability =   
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::PERFECT][0];
 
-		Hand::_gu_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_PERFECT][0];
-		Hand::_choki_prob = Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_PERFECT][1];
-		Hand::_pa_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_PERFECT][2];
+		Hand::_chokiHandProbability = 
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::PERFECT][1];
 
+		Hand::_paHandProbability =    
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::PERFECT][2];
 		break;
-	case SliderEvent::SLIDER_GRADE_GREAT:
+	//　グレート
+	case SliderEvent::GREAT:
 
-		Hand::_gu_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_GREAT][0];
-		Hand::_choki_prob = Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_GREAT][1];
-		Hand::_pa_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_GREAT][2];
+		Hand::_guHandProbability =   
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::GREAT][0];
 
+		Hand::_chokiHandProbability = 
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::GREAT][1];
+
+		Hand::_paHandProbability =   
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::GREAT][2];
 		break;
-	case SliderEvent::SLIDER_GRADE_GOOD:
+	//　グッド
+	case SliderEvent::GOOD:
 
-		Hand::_gu_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_GOOD][0];
-		Hand::_choki_prob = Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_GOOD][1];
-		Hand::_pa_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_GOOD][2];
+		Hand::_guHandProbability =   
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::GOOD][0];
 
+		Hand::_chokiHandProbability =
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::GOOD][1];
+
+		Hand::_paHandProbability =   
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::GOOD][2];
 		break;
-	case SliderEvent::SLIDER_GRADE_BAD:
+	//　バッド
+	case SliderEvent::BAD:
 
-		Hand::_gu_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_BAD][0];
-		Hand::_choki_prob = Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_BAD][1];
-		Hand::_pa_prob =    Hand::HAND_PROB_ARY_EACH_GRADE[SliderEvent::SLIDER_GRADE_BAD][2];
+		Hand::_guHandProbability =   
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::BAD][0];
 
+		Hand::_chokiHandProbability =
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::BAD][1];
+
+		Hand::_paHandProbability =   
+			Hand::_bossHandProbabilitiesByGrade[SliderEvent::BAD][2];
 		break;
 	}
 
-	boss_gcpHand_str[0] = std::to_string(Hand::_gu_prob);
-	boss_gcpHand_str[1] = std::to_string(Hand::_choki_prob);
-	boss_gcpHand_str[2] = std::to_string(Hand::_pa_prob);
+	//　各文字列へ代入
+	_bossHand_predictableStrings[0] = std::to_string(Hand::_guHandProbability);
+	_bossHand_predictableStrings[1] = std::to_string(Hand::_chokiHandProbability);
+	_bossHand_predictableStrings[2] = std::to_string(Hand::_paHandProbability);
 }
 
 
 
 void EnemyBoss::RenderBossHandProb(const SliderEvent* slider) {
 
-	// 敵の出す手
-	SetBossHandProb_BySliderGrade(slider);
+	SetBossHandProbability_BySliderGrade(slider);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 60);
 	DrawBox(0, 480, 1300, 685, 0, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// 手札の確率String
 	SetFontSize(50);
 
-	DrawStringEx(
-		Hand::GUCHOKIPA_HANDPOS_TBL[0].x - 10,
-		Hand::GUCHOKIPA_HANDPOS_TBL[0].y - 65,
-		0xFFFACD,
-		boss_gcpHand_str[0].c_str()
-	);
-	DrawStringEx(
-		Hand::GUCHOKIPA_HANDPOS_TBL[1].x - 10,
-		Hand::GUCHOKIPA_HANDPOS_TBL[1].y - 65,
-		0xFFFACD, 
-		boss_gcpHand_str[1].c_str()
-	);
-	DrawStringEx(
-		Hand::GUCHOKIPA_HANDPOS_TBL[2].x - 10,
-		Hand::GUCHOKIPA_HANDPOS_TBL[2].y - 65,
-		0xFFFACD, 
-		boss_gcpHand_str[2].c_str()
-	);
+	RenderBossHandProbability();
 }
 
 
 
+void EnemyBoss::RenderBossHandProbability()
+{
+	//　最終的に決定したボスの手の確率文字列をそれぞれ表示
+
+	//　グー
+	DrawStringEx(
+		Hand::GU_CHOKI_PA_IMAGE_POSITIONS[0].x - 10,
+		Hand::GU_CHOKI_PA_IMAGE_POSITIONS[0].y - 65,
+		0xFFFACD,
+		_bossHand_predictableStrings[0].c_str()
+	);
+
+	//　チョキ
+	DrawStringEx(
+		Hand::GU_CHOKI_PA_IMAGE_POSITIONS[1].x - 10,
+		Hand::GU_CHOKI_PA_IMAGE_POSITIONS[1].y - 65,
+		0xFFFACD,
+		_bossHand_predictableStrings[1].c_str()
+	);
+
+	//　パー
+	DrawStringEx(
+		Hand::GU_CHOKI_PA_IMAGE_POSITIONS[2].x - 10,
+		Hand::GU_CHOKI_PA_IMAGE_POSITIONS[2].y - 65,
+		0xFFFACD,
+		_bossHand_predictableStrings[2].c_str()
+	);
+}
+
+
 void EnemyBoss::RenderJankenResult() {
+
+	//　ボスが選択した手を表示
 
 	DrawRotaGraphF(
 		Hand::RESULT_BOSS_HAND_POS.x + 55,
 		Hand::RESULT_BOSS_HAND_POS.y - 15,
 		0.5f, 
 		0, 
-		Hand::_gpc_hand_hdl[Hand::_bossSelectedHand],
+		Hand::_gpc_handImageHandle[Hand::_bossSelectedHand],
 		true
 	);
+
 	DrawStringEx(
 		Hand::RESULT_BOSS_HAND_POS.x + 45,
 		Hand::RESULT_BOSS_HAND_POS.y + 50, 

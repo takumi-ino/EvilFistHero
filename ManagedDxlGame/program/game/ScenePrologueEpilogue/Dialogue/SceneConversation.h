@@ -2,14 +2,16 @@
 
 class DialogueButtons;
 
+
+// プロローグとエピローグを管理（　SceneTitle_SelectMenuの次　と ステージ５開始時　）
 class SceneConversation : public SceneBase
 {
 public:
 
 	SceneConversation();
 
-	void Update(float deltaTime) override;
-	void Render(float deltaTime) override;
+	void Update(const float deltaTime) override;
+	void Render(const float deltaTime) override;
 
 private:
 
@@ -66,14 +68,14 @@ public:
 
 private:
 
-	bool _isSetPlayerBright = false;
-	bool _isSetGoddessBright = false;
-	bool _isSetGirlBright = false;
-	bool _isSetFinalBossBright = false;
-
-	bool _showPlayer = false;
-	bool _showGoddess = false;
-	bool _showGirl = false;
+	bool      _isSetPlayerBright = false;
+	bool      _isSetGoddessBright = false;
+	bool      _isSetGirlBright = false;
+	bool      _isSetFinalBossBright = false;
+		      
+	bool      _showPlayer = false;
+	bool      _showGoddess = false;
+	bool      _showGirl = false;
 
 	// ----------------------------------------
 	int       _bg_hdl{};        // 背景ハンドル

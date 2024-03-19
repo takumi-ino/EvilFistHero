@@ -14,7 +14,7 @@ int SceneConversation::Prologue_Epilogue = 0;
 
 namespace {
 
-	// CSVロード関数が日本語に対応していないため、ここに直にテキストを置いています
+	// CSVロード関数が日本語に対応していないため、ここに直にテキストを置いています.......
 
 	std::string prologueTextLog[140] = {
 
@@ -486,6 +486,7 @@ void SceneConversation::PrintDialogueText() {
 			_receiveText[_CURRENT_TEXTROW] = epilogueTextLog[_CURRENT_TEXTROW].substr(0, _printTextSpeed);
 		}
 	}
+
 }
 
 
@@ -572,7 +573,7 @@ void SceneConversation::StartFinalBossBattle()
 
 		SceneStageMap ss;
 
-		ss.SetStageInfo_BeforeStartGame(StageSymbol::Symbol::KINGDOM);
+		ss.ResetHP_BeforeStartGame(SymbolOfStageMap::TYPE::KINGDOM);
 	}
 }
 
@@ -584,9 +585,9 @@ void SceneConversation::MoveToStageMap()
 		_CURRENT_TEXTROW = 0;
 
 		// ステージマップで表示するシンボルを初期化
-		[](StageSymbol* ss) {
+		[](SymbolOfStageMap* ss) {
 
-			ss = new StageSymbol();
+			ss = new SymbolOfStageMap();
 			ss->InstantiateButton();
 			delete ss;
 			ss = nullptr;
@@ -892,69 +893,89 @@ void SceneConversation::ShowFinalBossImage() {
 		SetDrawBright(80, 80, 80);
 
 
-	if (_CURRENT_TEXTROW == 19)
+	if (_CURRENT_TEXTROW == 19) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿シルエット");
+	}
 
-	if (_CURRENT_TEXTROW >= 19 && _CURRENT_TEXTROW <= 34)
+	if (_CURRENT_TEXTROW >= 19 && _CURRENT_TEXTROW <= 34) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿シルエット");
+	}
 
-	if (_CURRENT_TEXTROW == 35)
+	if (_CURRENT_TEXTROW == 35) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW >= 35 && _CURRENT_TEXTROW <= 39)
+	if (_CURRENT_TEXTROW >= 35 && _CURRENT_TEXTROW <= 39) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW == 40)
+	if (_CURRENT_TEXTROW == 40) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿デフォルト");
+	}
 
-	if (_CURRENT_TEXTROW >= 40 && _CURRENT_TEXTROW <= 43)
+	if (_CURRENT_TEXTROW >= 40 && _CURRENT_TEXTROW <= 43) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿デフォルト");
+	}
 
-	if (_CURRENT_TEXTROW == 44)
+	if (_CURRENT_TEXTROW == 44) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW >= 44 && _CURRENT_TEXTROW <= 54)
+	if (_CURRENT_TEXTROW >= 44 && _CURRENT_TEXTROW <= 54) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW == 55)
+	if (_CURRENT_TEXTROW == 55) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿笑顔");
+	}
 
-	if (_CURRENT_TEXTROW >= 55 && _CURRENT_TEXTROW <= 56)
+	if (_CURRENT_TEXTROW >= 55 && _CURRENT_TEXTROW <= 56) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿笑顔");
+	}
 
-	if (_CURRENT_TEXTROW == 57)
+	if (_CURRENT_TEXTROW == 57) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿デフォルト");
+	}
 
-	if (_CURRENT_TEXTROW >= 57 && _CURRENT_TEXTROW <= 58)
+	if (_CURRENT_TEXTROW >= 57 && _CURRENT_TEXTROW <= 58) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿デフォルト");
+	}
 
-	if (_CURRENT_TEXTROW == 59)
+	if (_CURRENT_TEXTROW == 59) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW >= 59 && _CURRENT_TEXTROW <= 70)
+	if (_CURRENT_TEXTROW >= 59 && _CURRENT_TEXTROW <= 70) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW == 71)
+	if (_CURRENT_TEXTROW == 71) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿ダメージ_2");
+	}
 
-	if (_CURRENT_TEXTROW >= 71 && _CURRENT_TEXTROW <= 72)
+	if (_CURRENT_TEXTROW >= 71 && _CURRENT_TEXTROW <= 72) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_2");
+	}
 
-	if (_CURRENT_TEXTROW == 73)
+	if (_CURRENT_TEXTROW == 73) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW >= 73 && _CURRENT_TEXTROW <= 74)
+	if (_CURRENT_TEXTROW >= 73 && _CURRENT_TEXTROW <= 74) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+	}
 
-	if (_CURRENT_TEXTROW == 75)
+	if (_CURRENT_TEXTROW == 75) {
 		ImageManager::GetInstance().LoadCharacterImage("ステージ5＿ボス＿ダメージ_4");
+	}
 
-	if (_CURRENT_TEXTROW >= 75)
+	if (_CURRENT_TEXTROW >= 75) {
 		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_4");
+	}
 }
 
 
-void SceneConversation::Render(float deltaTime) {
+void SceneConversation::Render(const float deltaTime) {
 
 	SetDrawBright(255, 255, 255);
 
@@ -963,28 +984,31 @@ void SceneConversation::Render(float deltaTime) {
 
 	// テキスト描画
 	PrintDialogueText();
-	PrintNextByInput();
+	SetFontSize(22);
+	DrawString(90, 550, _receiveText[_CURRENT_TEXTROW].c_str(), -1);
+
 
 	// ボタン描画
-	_buttons_ptr->RenderDialogueButtons();
-	_buttons_ptr->AutoDialogue();
+	_buttons_ptr->RenderDialogueButton();
 
-	SetFontSize(22);
-	DrawStringEx(90, 550, -1, "%s", _receiveText[_CURRENT_TEXTROW].c_str());
 
-	SetFontSize(35);
+	SetFontSize(35); // 右下に表示
 	DrawString(1070, 620, "Enter", -1);
 }
 
 
 //　更新----------------------------------------------------------------------------------------------------------
-void SceneConversation::Update(float deltaTime) {
+void SceneConversation::Update(const float deltaTime) {
 
 	MoveToStageMap();
 
 	StartFinalBossBattle();
 
 	Control_StoryLineStream();
+
+	// ダイアログボタン-----------------------------------------
+	_buttons_ptr->AutoDialogue();
+	PrintNextByInput();
 }
 
 void SceneConversation::ReleaseMem() {

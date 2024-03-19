@@ -3,6 +3,15 @@
 #include "SceneTitle/SceneTitle.h"
 #include "Manager/SceneManager/SceneManager.h"
 
+
+/*
+　　　　　　　　　　　　　　　　　　　　　　　　ゲームの流れ
+
+  　　　SceneTitle　→　SceneTitle_SelectMenu　→　SceneConversation　→　SceneStageMap　→　ScenePlay
+
+*/
+
+
 //------------------------------------------------------------------------------------------------------------
 // ゲーム起動時に１度だけ実行されます
 void gameStart(){
@@ -16,12 +25,12 @@ void gameStart(){
 
 //------------------------------------------------------------------------------------------------------------
 // 毎フレーム実行されます
-void gameMain(float delta_time) {
+void gameMain(float deltaTime) {
 
 	ChangeFont("源界明朝", DX_CHARSET_DEFAULT);
 
-	SceneManager::GetInstance()->Update(delta_time);
-	SceneManager::GetInstance()->Render(delta_time);
+	SceneManager::GetInstance()->Update(deltaTime);
+	SceneManager::GetInstance()->Render(deltaTime);
 }
 
 //------------------------------------------------------------------------------------------------------------

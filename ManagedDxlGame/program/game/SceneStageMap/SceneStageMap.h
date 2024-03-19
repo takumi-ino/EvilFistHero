@@ -1,21 +1,23 @@
 #pragma once
 #include "../Manager/SceneManager/SceneBase.h"
-#include "Symbol/StageSymbol.h"
+#include "Symbol/SymbolOfStageMap.h"
 
 class EnemyBoss;
 
+
+//　ワールドマップからステージを選ぶ（　SceneConversation の次　）
 class SceneStageMap : public SceneBase
 {
 public:
 
 	SceneStageMap();
 
-	void Update(float deltaTime) override;
-	void Render(float deltaTime) override;
+	void Update(const float deltaTime) override;
+	void Render(const float deltaTime) override;
 	void ReleaseMem() override;
 
-	// 選択したステージへ飛ぶために必要な情報をセット
-	void SetStageInfo_BeforeStartGame(const StageSymbol::Symbol symbol);
+	// プレイヤーおよびボスのHPを初期化
+	void ResetHP_BeforeStartGame(const SymbolOfStageMap::TYPE symbol);
 
 private:
 
@@ -24,18 +26,19 @@ private:
 
 	// エンターキーでゲームスタート
 	void GameStartByInput();
+
+	void MoveToScenePlay();
 	
-	// 講師配布のライブラリ。メモリのロードなど1度だけ実行したい処理で Sequence クラスを使用
+	// 講師配布のライブラリ機能。メモリのロードなど1度だけ実行したい処理で Sequence クラスを使用
 	tnl::Sequence<SceneStageMap> _sequence = tnl::Sequence<SceneStageMap>(this, &SceneStageMap::SeqIdle);
 	bool SeqIdle(float deltaTime);
 
 private:
 
-	StageSymbol* _symbolRef_ptr = nullptr;
-	EnemyBoss*   _bossRef_ptr = nullptr;
+	SymbolOfStageMap* _symbolOfStageMap = nullptr;  // ステージマップ上に表示するシンボル
 
 private:
 
 	// 背景画像ハンドル
-	int          _bgImage_hdl{};
+	int              _backGroundImage_hdl{};
 };

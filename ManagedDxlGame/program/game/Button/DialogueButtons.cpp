@@ -6,7 +6,7 @@
 #include "../Manager/SceneManager/SceneManager.h"
 #include "../SceneTitle/SceneTitle.h"
 #include "../ScenePrologueEpilogue/Dialogue/SceneConversation.h"
-#include "../SceneStageMap/Symbol/StageSymbol.h"
+#include "../SceneStageMap/Symbol/SymbolOfStageMap.h"
 
 
 namespace {
@@ -21,7 +21,7 @@ namespace {
 	// ボタンの間隔
 	const int BUTTON_INTERVAL_DIALOGUE = 170;
 
-	const char* _buttonImgPath_dialogue[7] =
+	const char* BUTTON_IMAGE_PATH[7] =
 	{
 	"graphics/Buttons/TitleFuncBtn.png",
 	"graphics/Buttons/LoadFuncBtn.png",
@@ -34,22 +34,38 @@ namespace {
 }
 
 
+
+DialogueButtons::DialogueButtons() {
+
+
+}
+
+
 std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton() {
 
 	std::shared_ptr<DialogueButtons[]> buttonArray(new DialogueButtons[BUTTON_ALL_NUM_DIALOGUE]);
 
 	for (int i = 0; i < BUTTON_ALL_NUM_DIALOGUE; i++) {
 
-		int _button_hdl = LoadGraph(_buttonImgPath_dialogue[i]);
+		int buttonHandle = LoadGraph(BUTTON_IMAGE_PATH[i]);      // 配列から複数の画像をロード
 
-		int x = BUTTON_POS_X_DIALOGUE + i * BUTTON_INTERVAL_DIALOGUE;
+		int x = BUTTON_POS_X_DIALOGUE + (i * BUTTON_INTERVAL_DIALOGUE);  // 7つのボタンを等間隔で配置
 		int y = BUTTON_POS_Y_DIALOGUE;
 
-		_button_width = 30, _button_height = 15;
+		_buttonWidth = 30;   // 幅
+		_buttonHeight = 15;  // 高さ
 
-		TYPE type = (TYPE)i;
+		TYPE type = static_cast<TYPE>(i);
 
-		buttonArray[i] = DialogueButtons(_button_hdl, x, y, _button_width, _button_height, _BUTTON_SIZE_NORMAL_DIALOGUE, _BUTTON_SIZE_ZOOM_DIALOGUE, type);
+		buttonArray[i] = DialogueButtons(   
+			buttonHandle,
+			x, y, 
+			_buttonWidth,
+			_buttonHeight,
+			_BUTTON_SIZE_NORMAL_DIALOGUE,
+			_BUTTON_SIZE_ZOOM_DIALOGUE,
+			type
+		);
 	}
 
 	return buttonArray;
@@ -57,47 +73,49 @@ std::shared_ptr<DialogueButtons[]> DialogueButtons::Instantiate_DialogueButton()
 
 
 
-void DialogueButtons::ManageDialogueButton() {
+void DialogueButtons::RenderDialogueButton() {
 
-	static std::shared_ptr<DialogueButtons[]> buttonArray;
+	static std::shared_ptr<DialogueButtons[]> buttonArray = nullptr;
 
-	if (buttonArray == nullptr)
-		buttonArray = Instantiate_DialogueButton();
+	if (buttonArray == nullptr) {
+
+		buttonArray = Instantiate_DialogueButton(); // 1度だけ初期化し、ボタンを生成	
+	}
 
 	// ボタンの描画と処理
 	for (int i = 0; i < BUTTON_ALL_NUM_DIALOGUE; i++) {
 
 		// 排他制御
-		std::lock_guard<std::mutex> lock(mtx);
+		std::lock_guard<std::mutex> lock(_mtx);
 
-		DialogueButtons& btn = buttonArray[i];
+		DialogueButtons& ary = buttonArray[i];
 
-		ZoomOnMouse_Dialogue(btn);
-		ClickOnButton_Dialogue(btn);
+		ZoomOnMouseCursor(ary);      // ズーム機能
+		ClickByMouseCursor(ary);     // クリック機能
 
-		DrawRotaGraph(btn._button_x1, btn._button_y1, btn._currentSize, 0.0f, btn._button_hdl, true);
+		DrawRotaGraph(               // 描画
+			ary._buttonX1,
+			ary._buttonY1,
+			ary._currentSize, 
+			0.0f,
+			ary._buttonHandle,
+			true
+		);
 	}
 }
 
 
 
-void DialogueButtons::RenderDialogueButtons() {
+void DialogueButtons::ZoomOnMouseCursor(DialogueButtons& btnInfo) {
 
-	ManageDialogueButton();
-}
+	int hoveredPoint_x = 0, hoveredPoint_y = 0;
 
+	GetMousePoint(&hoveredPoint_x, &hoveredPoint_y);
 
-
-void DialogueButtons::ZoomOnMouse_Dialogue(DialogueButtons& btnInfo) {
-
-	int hoveredX = 0, hoveredY = 0;
-
-	GetMousePoint(&hoveredX, &hoveredY);
-
-	if (hoveredX >= btnInfo._button_x1 &&
-		hoveredX <= btnInfo._button_x1 + btnInfo._button_width && 
-		hoveredY >= btnInfo._button_y1 &&
-		hoveredY <= btnInfo._button_y1 + btnInfo._button_height)
+	if (hoveredPoint_x >= btnInfo._buttonX1 &&
+		hoveredPoint_x <= btnInfo._buttonX1 + btnInfo._buttonWidth && 
+		hoveredPoint_y >= btnInfo._buttonY1 &&
+		hoveredPoint_y <= btnInfo._buttonY1 + btnInfo._buttonHeight)
 	{
 		btnInfo._currentSize = btnInfo._BUTTON_SIZE_ZOOM_DIALOGUE;
 	}
@@ -108,21 +126,21 @@ void DialogueButtons::ZoomOnMouse_Dialogue(DialogueButtons& btnInfo) {
 
 
 
-void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
+void DialogueButtons::ClickByMouseCursor(const DialogueButtons& btnInfos) {
 
-	int clickX_axis = 0, clickY_axis = 0;
+	int clickPoint_x = 0, clickPoint_y = 0;
 
-	GetMousePoint(&clickX_axis, &clickY_axis);
+	GetMousePoint(&clickPoint_x, &clickPoint_y);
 
 	if (GetMouseInput() && MOUSE_INPUT_LEFT) {
 
-		if (clickX_axis >= btnInfos._button_x1 && 
-			clickX_axis <= btnInfos._button_x1 + btnInfos._button_width &&
-			clickY_axis >= btnInfos._button_y1 && 
-			clickY_axis <= btnInfos._button_y1 + btnInfos._button_height)
+		if (clickPoint_x >= btnInfos._buttonX1 && 
+			clickPoint_x <= btnInfos._buttonX1 + btnInfos._buttonWidth &&
+			clickPoint_y >= btnInfos._buttonY1 && 
+			clickPoint_y <= btnInfos._buttonY1 + btnInfos._buttonHeight)
 		{
 			// ボタンの種類に応じて処理を分岐する
-			switch (btnInfos._type_dialogue) {
+			switch (btnInfos._type) {
 
 			case TYPE::TITLE: // TITLEボタン
 			{
@@ -149,7 +167,7 @@ void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
 				if (SceneConversation::Prologue_Epilogue == 1) {
 
 					SceneStageMap ss;
-					ss.SetStageInfo_BeforeStartGame(StageSymbol::Symbol::KINGDOM);
+					ss.ResetHP_BeforeStartGame(SymbolOfStageMap::TYPE::KINGDOM);
 
 					return;
 				}
@@ -162,7 +180,7 @@ void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
 
 				break;
 			}
-			case TYPE::LOG: // LOGボタン
+			case TYPE::LOG:    // LOGボタン
 			{
 				break;
 			}
@@ -179,7 +197,7 @@ void DialogueButtons::ClickOnButton_Dialogue(const DialogueButtons& btnInfos) {
 
 void DialogueButtons::AutoDialogue() {
 
-	if (!_autoText) 	return;
+	if (!_autoText)	return;
 
 	_autoTimer += 0.02f;
 
