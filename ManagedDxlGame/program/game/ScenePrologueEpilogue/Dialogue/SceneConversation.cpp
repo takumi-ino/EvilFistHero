@@ -454,9 +454,8 @@ SceneConversation::SceneConversation() {
 
 	_buttons_ptr = new DialogueButtons();
 
-	ImageManager::GetInstance().SetBackGroundMapKey();
-	ImageManager::GetInstance().SetCharacterMapKey();
-
+	ImageManager::GetInstance().SetBackGroundMapKey(); // mapで使用する 背景画像 のキーを設定
+	ImageManager::GetInstance().SetCharacterMapKey();   // mapで使用する キャラクター画像 のキーを設定
 }
 
 
@@ -470,9 +469,11 @@ void SceneConversation::PrintDialogueText() {
 
 			_receiveText[i] = prologueTextLog[i];
 		}
+		//　140行以内
 		if (_CURRENT_TEXTROW < 140) {
 
-			_receiveText[_CURRENT_TEXTROW] = prologueTextLog[_CURRENT_TEXTROW].substr(0, _printTextSpeed);
+			_receiveText[_CURRENT_TEXTROW] =   // テキストの最初から _printTextSpeed 分だけ取得
+				prologueTextLog[_CURRENT_TEXTROW].substr(0, _printTextSpeed);
 		}
 	}
 	else {
@@ -483,7 +484,8 @@ void SceneConversation::PrintDialogueText() {
 		}
 		if (_CURRENT_TEXTROW < 140) {
 
-			_receiveText[_CURRENT_TEXTROW] = epilogueTextLog[_CURRENT_TEXTROW].substr(0, _printTextSpeed);
+			_receiveText[_CURRENT_TEXTROW] =
+				epilogueTextLog[_CURRENT_TEXTROW].substr(0, _printTextSpeed);
 		}
 	}
 
@@ -492,27 +494,33 @@ void SceneConversation::PrintDialogueText() {
 
 void SceneConversation::PrintNextByInput() {
 
+	//　プロローグ
 	if (SceneConversation::Prologue_Epilogue == 0) {
 
-		// エンターで文字送り
+		//　１行分の文字列が 毎フレーム新たに表示する文字数より多ければ
 		if (prologueTextLog[_CURRENT_TEXTROW].length() > _printTextSpeed) {
 
 			_printTextSpeed += _printTextSpeed_adjustRate;
 		}
-		else if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN) && (prologueTextLog[_CURRENT_TEXTROW].length() <= _printTextSpeed)) {
+		// エンターで文字送り
+		else if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN) &&
+			(prologueTextLog[_CURRENT_TEXTROW].length() <= _printTextSpeed)) {
 
 			_CURRENT_TEXTROW++;
 			_printTextSpeed = 0;
 		}
 	}
+	//　エピローグ
 	else {
 
-		// エンターで文字送り
+		//　１行分の文字列が 毎フレーム新たに表示する文字数より多ければ
 		if (epilogueTextLog[_CURRENT_TEXTROW].length() > _printTextSpeed) {
 
 			_printTextSpeed += _printTextSpeed_adjustRate;
 		}
-		else if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN) && (epilogueTextLog[_CURRENT_TEXTROW].length() <= _printTextSpeed)) {
+		// エンターで文字送り
+		else if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN) &&
+			(epilogueTextLog[_CURRENT_TEXTROW].length() <= _printTextSpeed)) {
 
 			_CURRENT_TEXTROW++;
 			_printTextSpeed = 0;
@@ -523,6 +531,7 @@ void SceneConversation::PrintNextByInput() {
 
 void SceneConversation::Control_StoryLineStream() {
 
+	//　プロローグ
 	if (SceneConversation::Prologue_Epilogue == 0) {
 
 		// 背景画像---------------------------------------------------------------------
@@ -550,6 +559,7 @@ void SceneConversation::Control_StoryLineStream() {
 		// 名前入力
 		//SetPlayersName();
 	}
+	//　エピローグ
 	else {
 
 		if (_CURRENT_TEXTROW == 0) {
@@ -635,12 +645,16 @@ void SceneConversation::GetInputName_AtLast() {
 //　ハイライト設定----------------------------------------------------------------------------------------------------------
 void SceneConversation::SetPlayersHighlight_Prologue() {
 
-	if (_CURRENT_TEXTROW == 9 || _CURRENT_TEXTROW == 12 || _CURRENT_TEXTROW == 16 || _CURRENT_TEXTROW == 21 || _CURRENT_TEXTROW == 22 ||
-		_CURRENT_TEXTROW == 24 || _CURRENT_TEXTROW == 27 || _CURRENT_TEXTROW == 31 || _CURRENT_TEXTROW == 34 || _CURRENT_TEXTROW == 36 ||
-		_CURRENT_TEXTROW == 39 || _CURRENT_TEXTROW == 43 || _CURRENT_TEXTROW == 48 || _CURRENT_TEXTROW == 51 || _CURRENT_TEXTROW == 54 ||
-		_CURRENT_TEXTROW == 57 || _CURRENT_TEXTROW == 60 || _CURRENT_TEXTROW == 62 || _CURRENT_TEXTROW == 65 || _CURRENT_TEXTROW == 67 ||
-		_CURRENT_TEXTROW == 71 || _CURRENT_TEXTROW == 76 || _CURRENT_TEXTROW == 82 || _CURRENT_TEXTROW == 86 || _CURRENT_TEXTROW == 88 ||
-		_CURRENT_TEXTROW == 91 || _CURRENT_TEXTROW == 107 || _CURRENT_TEXTROW == 113 || _CURRENT_TEXTROW == 117 || _CURRENT_TEXTROW == 125) {
+	if (_CURRENT_TEXTROW == 9 || _CURRENT_TEXTROW == 12 || _CURRENT_TEXTROW == 16 ||
+		_CURRENT_TEXTROW == 21 || _CURRENT_TEXTROW == 22 || _CURRENT_TEXTROW == 24 ||
+		_CURRENT_TEXTROW == 27 || _CURRENT_TEXTROW == 31 || _CURRENT_TEXTROW == 34 ||
+		_CURRENT_TEXTROW == 36 || _CURRENT_TEXTROW == 39 || _CURRENT_TEXTROW == 43 ||
+		_CURRENT_TEXTROW == 48 || _CURRENT_TEXTROW == 51 || _CURRENT_TEXTROW == 54 ||
+		_CURRENT_TEXTROW == 57 || _CURRENT_TEXTROW == 60 || _CURRENT_TEXTROW == 62 ||
+		_CURRENT_TEXTROW == 65 || _CURRENT_TEXTROW == 67 || _CURRENT_TEXTROW == 71 ||
+		_CURRENT_TEXTROW == 76 || _CURRENT_TEXTROW == 82 || _CURRENT_TEXTROW == 86 ||
+		_CURRENT_TEXTROW == 88 || _CURRENT_TEXTROW == 91 || _CURRENT_TEXTROW == 107 ||
+		_CURRENT_TEXTROW == 113 || _CURRENT_TEXTROW == 117 || _CURRENT_TEXTROW == 125) {
 
 		_isSetPlayerBright = true;
 	}
@@ -652,9 +666,10 @@ void SceneConversation::SetPlayersHighlight_Prologue() {
 
 void SceneConversation::SetPlayersHighlight_Epilogue() {
 
-	if (_CURRENT_TEXTROW == 5 || _CURRENT_TEXTROW == 11 || _CURRENT_TEXTROW == 17 || _CURRENT_TEXTROW == 23 ||
-		_CURRENT_TEXTROW == 34 || _CURRENT_TEXTROW == 36 || _CURRENT_TEXTROW == 54 || _CURRENT_TEXTROW == 56 ||
-		_CURRENT_TEXTROW == 58 || _CURRENT_TEXTROW == 62 || _CURRENT_TEXTROW == 64 || _CURRENT_TEXTROW == 67 || _CURRENT_TEXTROW == 70)
+	if (_CURRENT_TEXTROW == 5 || _CURRENT_TEXTROW == 11 || _CURRENT_TEXTROW == 17 ||
+		_CURRENT_TEXTROW == 23 || _CURRENT_TEXTROW == 34 || _CURRENT_TEXTROW == 36 ||
+		_CURRENT_TEXTROW == 54 || _CURRENT_TEXTROW == 56 || _CURRENT_TEXTROW == 58 ||
+		_CURRENT_TEXTROW == 62 || _CURRENT_TEXTROW == 64 || _CURRENT_TEXTROW == 67 || _CURRENT_TEXTROW == 70)
 	{
 		_isSetPlayerBright = true;
 	}
@@ -666,9 +681,11 @@ void SceneConversation::SetPlayersHighlight_Epilogue() {
 
 void SceneConversation::SetGoddessHighlight() {
 
-	if (_CURRENT_TEXTROW == 10 || _CURRENT_TEXTROW == 26 || _CURRENT_TEXTROW == 28 || _CURRENT_TEXTROW == 30 || _CURRENT_TEXTROW == 32 ||
-		_CURRENT_TEXTROW == 33 || _CURRENT_TEXTROW == 35 || _CURRENT_TEXTROW == 37 || _CURRENT_TEXTROW == 38 || _CURRENT_TEXTROW == 40 ||
-		_CURRENT_TEXTROW == 41 || _CURRENT_TEXTROW == 42 || _CURRENT_TEXTROW == 44 || _CURRENT_TEXTROW == 45 || _CURRENT_TEXTROW == 46 ||
+	if (_CURRENT_TEXTROW == 10 || _CURRENT_TEXTROW == 26 || _CURRENT_TEXTROW == 28 ||
+		_CURRENT_TEXTROW == 30 || _CURRENT_TEXTROW == 32 || _CURRENT_TEXTROW == 33 ||
+		_CURRENT_TEXTROW == 35 || _CURRENT_TEXTROW == 37 || _CURRENT_TEXTROW == 38 ||
+		_CURRENT_TEXTROW == 40 || _CURRENT_TEXTROW == 41 || _CURRENT_TEXTROW == 42 ||
+		_CURRENT_TEXTROW == 44 || _CURRENT_TEXTROW == 45 || _CURRENT_TEXTROW == 46 ||
 		_CURRENT_TEXTROW == 58 || _CURRENT_TEXTROW == 61 || _CURRENT_TEXTROW == 64 || _CURRENT_TEXTROW == 66)
 	{
 		_isSetGoddessBright = true;
@@ -851,10 +868,12 @@ void SceneConversation::ShowGoddessImage() {
 			ImageManager::GetInstance().LoadCharacterImage("ノーマル＿女神");
 		}
 
-		if (_CURRENT_TEXTROW == 20 || _CURRENT_TEXTROW == 21 || _CURRENT_TEXTROW == 22 || _CURRENT_TEXTROW == 23 ||
-			_CURRENT_TEXTROW == 24 || _CURRENT_TEXTROW == 25 || _CURRENT_TEXTROW == 26 || _CURRENT_TEXTROW == 27 || _CURRENT_TEXTROW == 32 ||
-			_CURRENT_TEXTROW == 38 || _CURRENT_TEXTROW == 39 || _CURRENT_TEXTROW == 41 || _CURRENT_TEXTROW == 43 || _CURRENT_TEXTROW == 58 ||
-			_CURRENT_TEXTROW == 59 || _CURRENT_TEXTROW == 60 || _CURRENT_TEXTROW == 66 || _CURRENT_TEXTROW == 67) {
+		if (_CURRENT_TEXTROW == 20 || _CURRENT_TEXTROW == 21 || _CURRENT_TEXTROW == 22 ||
+			_CURRENT_TEXTROW == 23 || _CURRENT_TEXTROW == 24 || _CURRENT_TEXTROW == 25 ||
+			_CURRENT_TEXTROW == 26 || _CURRENT_TEXTROW == 27 || _CURRENT_TEXTROW == 32 ||
+			_CURRENT_TEXTROW == 38 || _CURRENT_TEXTROW == 39 || _CURRENT_TEXTROW == 41 ||
+			_CURRENT_TEXTROW == 43 || _CURRENT_TEXTROW == 58 || _CURRENT_TEXTROW == 59 ||
+			_CURRENT_TEXTROW == 60 || _CURRENT_TEXTROW == 66 || _CURRENT_TEXTROW == 67) {
 
 			ImageManager::GetInstance().RenderCharacterImage(1050, 520, 1.0f, 1, "ノーマル＿女神");
 		}
@@ -863,11 +882,14 @@ void SceneConversation::ShowGoddessImage() {
 			ImageManager::GetInstance().LoadCharacterImage("真剣＿女神");
 		}
 
-		if (_CURRENT_TEXTROW == 28 || _CURRENT_TEXTROW == 29 || _CURRENT_TEXTROW == 30 || _CURRENT_TEXTROW == 31 || _CURRENT_TEXTROW == 35 ||
-			_CURRENT_TEXTROW == 36 || _CURRENT_TEXTROW == 42 || _CURRENT_TEXTROW == 46 || _CURRENT_TEXTROW == 47 || _CURRENT_TEXTROW == 48 ||
-			_CURRENT_TEXTROW == 49 || _CURRENT_TEXTROW == 50 || _CURRENT_TEXTROW == 51 || _CURRENT_TEXTROW == 52 || _CURRENT_TEXTROW == 53 ||
-			_CURRENT_TEXTROW == 54 || _CURRENT_TEXTROW == 55 || _CURRENT_TEXTROW == 56 || _CURRENT_TEXTROW == 57 || _CURRENT_TEXTROW == 61 ||
-			_CURRENT_TEXTROW == 62 || _CURRENT_TEXTROW == 63 || _CURRENT_TEXTROW == 64 || _CURRENT_TEXTROW == 65) {
+		if (_CURRENT_TEXTROW == 28 || _CURRENT_TEXTROW == 29 || _CURRENT_TEXTROW == 30 ||
+			_CURRENT_TEXTROW == 31 || _CURRENT_TEXTROW == 35 || _CURRENT_TEXTROW == 36 ||
+			_CURRENT_TEXTROW == 42 || _CURRENT_TEXTROW == 46 || _CURRENT_TEXTROW == 47 ||
+			_CURRENT_TEXTROW == 48 || _CURRENT_TEXTROW == 49 || _CURRENT_TEXTROW == 50 ||
+			_CURRENT_TEXTROW == 51 || _CURRENT_TEXTROW == 52 || _CURRENT_TEXTROW == 53 ||
+			_CURRENT_TEXTROW == 54 || _CURRENT_TEXTROW == 55 || _CURRENT_TEXTROW == 56 ||
+			_CURRENT_TEXTROW == 57 || _CURRENT_TEXTROW == 61 || _CURRENT_TEXTROW == 62 ||
+			_CURRENT_TEXTROW == 63 || _CURRENT_TEXTROW == 64 ||	_CURRENT_TEXTROW == 65) {
 
 			ImageManager::GetInstance().RenderCharacterImage(1050, 520, 1.0f, 1, "真剣＿女神");
 		}
@@ -898,7 +920,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 19 && _CURRENT_TEXTROW <= 34) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿シルエット");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿シルエット"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 35) {
@@ -906,7 +930,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 35 && _CURRENT_TEXTROW <= 39) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 40) {
@@ -914,7 +940,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 40 && _CURRENT_TEXTROW <= 43) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿デフォルト");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿デフォルト"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 44) {
@@ -922,7 +950,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 44 && _CURRENT_TEXTROW <= 54) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 55) {
@@ -930,7 +960,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 55 && _CURRENT_TEXTROW <= 56) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿笑顔");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿笑顔"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 57) {
@@ -938,7 +970,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 57 && _CURRENT_TEXTROW <= 58) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿デフォルト");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿デフォルト"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 59) {
@@ -946,7 +980,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 59 && _CURRENT_TEXTROW <= 70) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 71) {
@@ -954,7 +990,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 71 && _CURRENT_TEXTROW <= 72) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_2");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_2"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 73) {
@@ -962,7 +1000,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 73 && _CURRENT_TEXTROW <= 74) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_1"
+		);
 	}
 
 	if (_CURRENT_TEXTROW == 75) {
@@ -970,7 +1010,9 @@ void SceneConversation::ShowFinalBossImage() {
 	}
 
 	if (_CURRENT_TEXTROW >= 75) {
-		ImageManager::GetInstance().RenderCharacterImage(1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_4");
+		ImageManager::GetInstance().RenderCharacterImage(
+			1050, 435, 0.8f, 1, "ステージ5＿ボス＿ダメージ_4"
+		);
 	}
 }
 

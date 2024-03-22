@@ -22,21 +22,31 @@ void GameOverMenu::SelectGameOverMenu() {
 
 	for (int i = 0; i < (int)GameOverMenu::NEXT::MAX_NUM; i++) {
 
-		DrawFormatString(gameOverMenuItems[i].x, gameOverMenuItems[i].y, GetColor(255, 255, 255), "E %s", gameOverMenuItems[i].name);
+		DrawFormatString(
+			gameOverMenuItems[i].x,
+			gameOverMenuItems[i].y, 
+			GetColor(255, 255, 255),
+			"E %s", gameOverMenuItems[i].name
+		);
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP)) {
-		gameOverMenuIndex = (gameOverMenuIndex + ((int)GameOverMenu::NEXT::MAX_NUM - 1)) % (int)GameOverMenu::NEXT::MAX_NUM;
+
+		gameOverMenuIndex = 
+			(gameOverMenuIndex + ((int)GameOverMenu::NEXT::MAX_NUM - 1)) % (int)GameOverMenu::NEXT::MAX_NUM;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
-		gameOverMenuIndex = (gameOverMenuIndex + 1) % (int)GameOverMenu::NEXT::MAX_NUM;
+
+		gameOverMenuIndex =
+			(gameOverMenuIndex + 1) % (int)GameOverMenu::NEXT::MAX_NUM;
 	}
 
 	if (tnl::Input::IsKeyDownTrigger(eKeys::KB_UP) || tnl::Input::IsKeyDownTrigger(eKeys::KB_DOWN)) {
 
 		for (int i = 0; i < (int)GameOverMenu::NEXT::MAX_NUM; i++) {
 
+			//@‘I‘ð’†‚Ì€–Ú‚È‚ç­‚µ¶‚É‚¸‚ç‚·
 			if (i == gameOverMenuIndex) 
 				gameOverMenuItems[i].x = 90;
 			else                      
@@ -51,12 +61,11 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 
 	switch (static_cast<GameOverMenu::NEXT>(gameOverMenuIndex))
 	{
-
 	case GameOverMenu::NEXT::RETRY:
 	{
 		if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
-			SoundManager::GetInstance().StopBGM();
+			SoundManager::GetInstance().StopBGM();    // BGM’âŽ~
 
 			auto scene = SceneManager::GetInstance();
 			scene->ChangeScene(new ScenePlay(SymbolOfStageMap::_episodeID));
@@ -76,7 +85,7 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 	{
 		if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
-			SoundManager::GetInstance().StopBGM();
+			SoundManager::GetInstance().StopBGM();    // BGM’âŽ~
 
 			auto scene = SceneManager::GetInstance();
 			scene->ChangeScene(new SceneStageMap());
@@ -87,7 +96,7 @@ void GameOverMenu::BranchProcess_ByGameOverMenu() {
 	{
 		if (tnl::Input::IsKeyDownTrigger(eKeys::KB_RETURN)) {
 
-			SoundManager::GetInstance().StopBGM();
+			SoundManager::GetInstance().StopBGM();    // BGM’âŽ~
 
 			auto scene = SceneManager::GetInstance();
 			scene->ChangeScene(new SceneTitle());

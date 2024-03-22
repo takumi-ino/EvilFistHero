@@ -102,7 +102,7 @@ void Hand::UpdateSelectHandCursorPos() {
 bool Hand::_canSelectBossHand = true;
 
 
-void Hand::SubtractLosersHP(int& playerHP, int& _bossHP) {
+void Hand::SubtractLosersHP(int& playerHP, int& bossHP) {
 
 	//　プレイヤーがグー
 	if (_playerHandIndex == HAND_TYPE_STONE) {
@@ -110,7 +110,7 @@ void Hand::SubtractLosersHP(int& playerHP, int& _bossHP) {
 		if (_bossSelectedHand == HAND_TYPE_SCISSORS) {
 
 			_jankenResult = RESULT_TYPE_WIN;
-			_bossHP--;
+			bossHP--;
 		}
 		if (_bossSelectedHand == HAND_TYPE_PAPER) {
 
@@ -129,7 +129,7 @@ void Hand::SubtractLosersHP(int& playerHP, int& _bossHP) {
 		if (_bossSelectedHand == HAND_TYPE_PAPER) {
 
 			_jankenResult = RESULT_TYPE_WIN;
-			_bossHP--;
+			bossHP--;
 		}
 		if (_bossSelectedHand == HAND_TYPE_STONE) {
 
@@ -148,7 +148,7 @@ void Hand::SubtractLosersHP(int& playerHP, int& _bossHP) {
 		if (_bossSelectedHand == HAND_TYPE_STONE) {
 
 			_jankenResult = RESULT_TYPE_WIN;
-			_bossHP--;
+			bossHP--;
 		}
 		if (_bossSelectedHand == HAND_TYPE_SCISSORS) {
 
@@ -262,12 +262,12 @@ void Hand::RenderJankenResultImage() {
 
 
 
-void Hand::RenderJankenResultText(const int playerHP, const int _bossHP) {
+void Hand::RenderJankenResultText(const int playerHP, const int bossHP) {
 
 	SetFontSize(DEFAULT_FONT_SIZE);
 
 	//　プレイヤーの勝ち
-	if (playerHP != 0 && _bossHP == 0) {
+	if (playerHP != 0 && bossHP == 0) {
 
 		SetFontSize(70);
 		DrawString(460, 400, "Game Clear", -1, true);
@@ -276,7 +276,7 @@ void Hand::RenderJankenResultText(const int playerHP, const int _bossHP) {
 		return;
 	}
 	//　プレイヤーの負け
-	if (playerHP == 0 && _bossHP != 0) {
+	if (playerHP == 0 && bossHP != 0) {
 
 		SetFontSize(70);
 		DrawString(480, 400, "Game Over", -1, true);

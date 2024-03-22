@@ -50,7 +50,7 @@ public:
 	void UpdateSelectHandCursorPos();	
 
 	// ”sŽÒ‚ÌHP‚ð1Œ¸‚ç‚·
-	void SubtractLosersHP(int& playerHP, int& _bossHP);	
+	void SubtractLosersHP(int& playerHP, int& bossHP);	
 
 	// •`‰æ----------------------------------------------------------------------------------
 	 
